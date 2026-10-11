@@ -364,12 +364,14 @@
         <h3>크롤 DQ 오탐 알림: 원인 좁히기</h3>
         <p class="one-liner">이미 끝난 크롤의 알림이 4시간마다 반복 → 측정, 기록, 알림 전달, 하류 네 층위로 나눠 원인을 확인했습니다.</p>
         <h4>증상 (2026.09)</h4>
-        <div class="metrics">
-          <div class="metric"><div class="value">1,388 vs 4,781</div><div class="label">DQ가 기록한 수집량 vs 실제 S3 적재량 (9/25, 재시도로 재개된 실행)</div></div>
-          <div class="metric"><div class="value">4h 5m 간격</div><div class="label">끝난 크롤의 '빈 카테고리 14개', '수집량 급감' 알림이 다음 크롤까지 반복</div></div>
-          <div class="metric"><div class="value">실패 0 → 실제 7</div><div class="label">9/22, Timeout으로 빠진 카테고리 7개가 실패 수에 잡히지 않아 알림 없음</div></div>
+        <div class="symptom">
+          <figure class="figure"><a href="../assets/img/kg-rag/alert-repeated.webp" target="_blank" rel="noopener"><img src="../assets/img/kg-rag/alert-repeated.webp" width="484" height="645" alt="Discord 오탐 알림이 9월 30일 06:02와 10:07에 같은 내용(빈 카테고리 14개, 수집량 급감 1,388건)으로 두 번 발송된 화면" loading="lazy" decoding="async"></a><figcaption>같은 알림이 06:02, 10:07에 반복 (9/30)</figcaption></figure>
+          <div class="symptom-metrics">
+            <div class="metric"><div class="value">1,388 vs 4,781</div><div class="label">DQ가 기록한 수집량 vs 실제 S3 적재량 (9/25, 재시도로 재개된 실행)</div></div>
+            <div class="metric"><div class="value">4h 5m 간격</div><div class="label">끝난 크롤의 '빈 카테고리 14개', '수집량 급감' 알림이 다음 크롤까지 반복</div></div>
+            <div class="metric"><div class="value">실패 0 → 실제 7</div><div class="label">9/22, Timeout으로 빠진 카테고리 7개가 실패 수에 잡히지 않아 알림 없음</div></div>
+          </div>
         </div>
-<figure class="figure"><a href="../assets/img/kg-rag/alert-repeated.webp" target="_blank" rel="noopener"><img src="../assets/img/kg-rag/alert-repeated.webp" width="490" height="316" alt="Discord 오탐 알림: 빈 카테고리 14개, 수집량 급감 1,388건" loading="lazy" decoding="async"></a><figcaption>4시간마다 반복된 오탐 알림</figcaption></figure>
         <h4>원인 (크롤 로그, S3 manifest 24개 재계산, DQ 30일 행으로 확인)</h4>
         <div class="table-wrap">
           <table>
