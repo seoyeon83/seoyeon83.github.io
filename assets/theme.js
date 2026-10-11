@@ -9,6 +9,18 @@
   }
 
   document.addEventListener("DOMContentLoaded", function () {
+    var top = document.querySelector(".to-top");
+    if (top) {
+      var onScroll = function () { top.hidden = window.scrollY < 600; };
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+      top.addEventListener("click", function () {
+        window.scrollTo(0, 0);
+        var h = document.querySelector("h1");
+        if (h) { h.setAttribute("tabindex", "-1"); h.focus({ preventScroll: true }); }
+      });
+    }
+
     var btn = document.querySelector(".theme-toggle");
     if (!btn) return;
     function sync() {
