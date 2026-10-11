@@ -1,0 +1,13 @@
+# 원본 자료 (개인정보 포함, 공개 금지)
+/portfolio.pptx
+/resume.docx
+/profile.jpg
+*.pptx
+*.docx
+*.pdf
+~$*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/

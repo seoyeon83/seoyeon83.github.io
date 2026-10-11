@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BOAZ 공식 웹 사이트 | 김서연</title>
+  <meta name="description" content="BOAZ 공식 웹 사이트 백엔드 PM. 비용과 보안을 함께 고려한 AWS 인프라, 시즌제 고가용성, CloudWatch 모니터링, CloudFront 트러블슈팅.">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="BOAZ 공식 웹 사이트 | 김서연">
+  <meta property="og:description" content="백엔드 PM · AWS 인프라 설계 및 운영">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232563eb'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='16' font-weight='700' fill='white' text-anchor='middle'%3ESK%3C/text%3E%3C/svg%3E">
+  <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/theme.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">본문으로 건너뛰기</a>
+
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="../">김서연</a>
+      <nav class="header-nav" aria-label="주요 메뉴">
+        <a href="../#projects">프로젝트 목록</a>
+        <button class="theme-toggle" type="button" aria-label="다크 모드로 전환">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="container">
+    <p class="breadcrumb"><a href="../">홈</a> / <a href="../#projects">프로젝트</a></p>
+    <h1 class="detail-title">BOAZ 공식 웹 사이트</h1>
+    <p class="detail-lead">
+      현재 운영 중인 빅데이터 연합 동아리 BOAZ의 공식 웹 사이트입니다.
+      동아리 정보와 활동 기록을 제공하고, 반년마다 신규 기수를 모집합니다.
+    </p>
+
+    <dl class="info-grid">
+      <dt>소속</dt><dd>빅데이터 연합 동아리 BOAZ</dd>
+      <dt>기간</dt>
+      <dd>
+        2026.02 – 현재 (운영 및 고도화)
+        <ul>
+          <li>1차: 웹 사이트 개발 (2026년 상반기)</li>
+          <li>2차: 관리자 페이지 개발 및 AWS 인프라 IaC(Terraform) 마이그레이션 준비 중</li>
+        </ul>
+      </dd>
+      <dt>역할</dt><dd>백엔드 PM</dd>
+      <dt>주요 업무</dt>
+      <dd>
+        <ul>
+          <li>백엔드 팀 PM</li>
+          <li>신규 기수 지원 모집 및 평가, 관리자 기능 개발</li>
+          <li>AWS 인프라 설계 및 구축</li>
+          <li>실서비스 운영</li>
+        </ul>
+      </dd>
+      <dt>서비스 특성</dt>
+      <dd>
+        <ul>
+          <li>6개월에 1회, 2주만 모집</li>
+          <li>평시는 조회 위주, 마감 직전 동시 제출이 피크</li>
+          <li>지원서에 개인정보 포함</li>
+        </ul>
+      </dd>
+      <dt>성과</dt><dd>제24회 BOAZ 컨퍼런스 오프닝 세션 발표 (2026.07.25)</dd>
+    </dl>
+
+    <div class="repo-links" aria-label="관련 링크">
+      <a href="https://www.bigdataboaz.com" target="_blank" rel="noopener noreferrer">서비스 사이트 <span>www.bigdataboaz.com ↗</span></a>
+      <a href="https://github.com/BOAZ-website" target="_blank" rel="noopener noreferrer">GitHub 조직 <span>BOAZ-website ↗</span></a>
+      <a href="https://github.com/BOAZ-website/backend" target="_blank" rel="noopener noreferrer">백엔드 저장소 <span>BOAZ-website/backend ↗</span></a>
+    </div>
+
+    <div class="metrics">
+      <div class="metric"><div class="value">40%+</div><div class="label">시즌제 운영으로 상시 이중화 대비 연간 비용 절감</div></div>
+      <div class="metric"><div class="value">월 $50 / $113</div><div class="label">평시 / 모집 시즌(고가용성) 인프라 비용</div></div>
+      <div class="metric"><div class="value">t3.small 1대</div><div class="label">부하 테스트로 확인한 마감 피크 처리 용량</div></div>
+      <div class="metric"><div class="value">알람 12종</div><div class="label">CloudWatch + SNS 이메일 알림</div></div>
+    </div>
+
+    <nav class="toc" aria-labelledby="toc-title">
+      <h2 id="toc-title">목차</h2>
+      <ol>
+        <li><a href="#infra-1">인프라 설계 의사결정 (1): 보안과 비용의 경계</a></li>
+        <li><a href="#infra-2">인프라 설계 의사결정 (2): 시즌제 고가용성</a></li>
+        <li><a href="#monitoring">운영 모니터링 및 알람</a></li>
+        <li><a href="#troubleshooting">트러블슈팅: CloudFront 에러 TTL</a></li>
+      </ol>
+    </nav>
+
+    <section class="part" id="infra-1">
+      <p class="part-label">01</p>
+      <h2>인프라 설계 의사결정 (1): 보안과 비용의 경계</h2>
+      <p class="part-lead">초기에는 개인정보를 다루는 사이트인 만큼 보안을 최우선으로 설계했습니다.</p>
+
+      <div class="topic">
+        <h3>구성 비교</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>구성</th><th>보안</th><th>월 비용</th><th>추가 인프라</th></tr></thead>
+            <tbody>
+              <tr><td>ALB + 프라이빗 EC2 (초기 설계)</td><td>최상</td><td>~$70–75</td><td>Interface Endpoint, Bastion Host</td></tr>
+              <tr><td>퍼블릭 EC2</td><td>오리진 노출</td><td>최저</td><td>–</td></tr>
+              <tr class="chosen"><td>CloudFront + 퍼블릭 EC2 (최종 설계)</td><td>직접 접근 차단</td><td>~$43.5</td><td>–</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h4>다시 판단한 근거</h4>
+        <ul>
+          <li><strong>부하 테스트 결과:</strong> 마감 피크에도 t3.small 한 대로 충분 → ALB 로드밸런싱이 상시로 필요하지 않음</li>
+          <li>프라이빗 구조를 유지하려면 CodeDeploy용 Interface Endpoint, 운영 접속용 Bastion Host가 필요 → 보안을 위해 프라이빗으로 격리해 놓고 다시 통로를 만드는 구조</li>
+          <li>학생 동아리라는 특성상 비용을 최소화할 필요</li>
+        </ul>
+        <h4>최종 구조</h4>
+        <ul>
+          <li>Route 53 → CloudFront(API / Admin / Web 분리) → 퍼블릭 서브넷 EC2, 프라이빗 서브넷 RDS(Single-AZ)</li>
+          <li>프론트엔드·관리자 페이지는 S3 + CloudFront로 정적 배포, ACM 와일드카드 인증서</li>
+          <li>백엔드는 GitHub Actions → S3(JAR) → CodeDeploy로 배포</li>
+        </ul>
+        <div class="callout"><p>지켜야 하는 보안을 <strong>오리진 직접 접근 차단 + DB 격리</strong>로 정의하고, 이를 유지하면서 <strong>고정비와 복잡도를 줄이는 선택</strong>을 했습니다.</p></div>
+      </div>
+    </section>
+
+    <section class="part" id="infra-2">
+      <p class="part-label">02</p>
+      <h2>인프라 설계 의사결정 (2): 고가용성은 연 4주만</h2>
+      <p class="part-lead">신규 기수 모집은 1년에 두 번, 2주 동안 진행됩니다. 그 기간에는 서비스가 끊기면 안 된다는 요구 사항이 있었습니다.</p>
+
+      <div class="topic">
+        <h3>시즌제 전환</h3>
+        <h4>모집 기간에 추가되는 인프라</h4>
+        <ul>
+          <li>EC2 총 두 대 운영 → ALB로 로드밸런싱</li>
+          <li>RDS Multi-AZ 활성화</li>
+        </ul>
+        <h4>전환 범위를 최소화한 설계</h4>
+        <ul>
+          <li>사용자 진입점(도메인, 인증서)은 그대로 두고 CloudFront origin만 교체</li>
+          <li>예비 EC2는 모집 기간이 끝나면 stopped → 인스턴스 ID가 고정되어 대시보드와 에이전트 재설정 불필요</li>
+          <li>CodeDeploy 배포 그룹을 태그 기준으로 잡아 서버 대수가 바뀌어도 파이프라인은 그대로 유지 (태그가 붙은 stopped 인스턴스는 배포 실패가 되므로 시즌 전환 시 태그를 탈부착)</li>
+          <li>시즌 전환 과정을 <strong>Bash 스크립트로 묶어 자동화</strong></li>
+        </ul>
+        <h4>비용 효율화</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>구간</th><th>구성</th><th>월 비용</th></tr></thead>
+            <tbody>
+              <tr><td>평시</td><td>EC2 1대 + RDS Single-AZ</td><td>$50 안팎</td></tr>
+              <tr><td>모집 시즌</td><td>EC2 2대 + ALB + RDS Multi-AZ</td><td>$113</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout"><p>고가용성 비용을 연 4주에 한정해 <strong>상시 이중화 대비 연 40% 이상 절감</strong>했습니다.</p></div>
+      </div>
+    </section>
+
+    <section class="part" id="monitoring">
+      <p class="part-label">03</p>
+      <h2>운영 모니터링 및 알람 (CloudWatch + SNS)</h2>
+
+      <div class="topic">
+        <h3>대시보드를 두 개로 나눈 이유</h3>
+        <p class="one-liner">평시와 모집 시즌은 인프라 구성이 다르므로 봐야 할 것도 다릅니다.</p>
+        <ul style="margin-top:10px">
+          <li><strong>평시:</strong> EC2 단독 + RDS. "지금 정상인가"를 게이지로 즉시 확인</li>
+          <li><strong>시즌:</strong> EC2 두 대 + RDS의 모든 지표를 시계열로. NetworkIn을 A·B 같은 그래프에 올려 failover 시 A↓ B↑ 전환을 즉시 확인</li>
+        </ul>
+        <h4>알람 12종 → SNS → 이메일</h4>
+        <p>대시보드를 보지 못할 때 문제가 생겨도 담당자에게 이메일로 알람이 가도록 설정했습니다.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>알람</th><th>임계</th><th>근거</th></tr></thead>
+            <tbody>
+              <tr><td>RDS 커넥션 수</td><td>&gt; 50 / 5분</td><td>db.t3.micro 상한 약 60. 풀이 포화되면 HikariPool 대기 타임아웃으로 500 발생 → 상한에서 여유 10을 둠</td></tr>
+              <tr><td>EC2 메모리</td><td>&gt; 80% / 10분</td><td>Spring Boot 힙 설정 오류 시 t3.small 2GB에서 OOM. 기본 메트릭에 없어 CloudWatch Agent 설치 후 수집</td></tr>
+              <tr><td>EC2 디스크</td><td>&gt; 80% / 10분</td><td>EBS 20GB. 로그가 쌓여 꽉 차면 Spring Boot가 로그를 못 써 장애로 이어짐</td></tr>
+              <tr><td>CPU (EC2, RDS)</td><td>&gt; 80% / 10분</td><td>t3 버스트 인스턴스라 크레딧 소진 전 대응 필요. 단발 스파이크를 거르려 10분 지속 조건</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout"><p><strong>한계:</strong> 자원 지표 중심이라 사용자가 실제로 성공하고 있는지는 보이지 않습니다. 이 한계는 아래 트러블슈팅에서 실제로 드러났습니다.</p></div>
+      </div>
+    </section>
+
+    <section class="part" id="troubleshooting">
+      <p class="part-label">04</p>
+      <h2>트러블슈팅: CloudFront 에러 TTL</h2>
+
+      <div class="topic">
+        <h3>"관리자 로그인이 자꾸 실패해요. 그런데 3~4분 정도 지나니 복구됐어요"</h3>
+        <h4>원인 파악 과정</h4>
+        <ol>
+          <li>다른 브라우저에서 상황 재현 → 정상</li>
+          <li>서버 로그 확인 → 이상 없음 → 앱 코드 원인에서 배제</li>
+          <li>CloudFront 설정 확인 → 원인 발견</li>
+        </ol>
+        <h4>원인</h4>
+        <p>CloudFront(api)에 CachingDisabled를 걸어 뒀지만 캐시 정책과 에러 응답 TTL은 별개였습니다. 4xx/5xx 응답이 기본 TTL로 캐싱되어, 서버가 정상이어도 캐시된 에러가 계속 내려갔습니다.</p>
+        <h4>해결</h4>
+        <p>403 · 404 · 500 · 502 · 503 · 504 에러 응답의 최소 TTL을 0으로 변경했습니다.</p>
+        <div class="callout">
+          <p><strong>회고:</strong> 이 증상은 EC2와 RDS 자원 지표만으로는 드러나지 않습니다. CloudFront 5xx·응답 지연을 Tier 2로 설계해 뒀지만 실제로는 반영하지 못한 상태였고, 결국 사용자 제보로 알게 됐습니다.</p>
+          <p>서비스 앞단에서 사용자가 실제로 성공하고 있는지를 보는 지표가 필요하다는 것을 확인했습니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="프로젝트 이동">
+      <a href="kg-rag.html"><small>이전 프로젝트</small>← KG-RAG 기반 화장품 추천 시스템</a>
+      <a class="next" href="elixir.html"><small>다음 프로젝트</small>엘릭서 →</a>
+    </nav>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <span>© 2026 김서연</span>
+      <span><a href="https://github.com/seoyeon83" target="_blank" rel="noopener noreferrer">GitHub</a> · <a href="https://www.linkedin.com/in/seoyeon-kim-b7369a305/" target="_blank" rel="noopener noreferrer">LinkedIn</a></span>
+    </div>
+  </footer>
+</body>
+</html>
