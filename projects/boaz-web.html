@@ -124,6 +124,7 @@
           <li>프론트엔드·관리자 페이지는 S3 + CloudFront로 정적 배포, ACM 와일드카드 인증서</li>
           <li>백엔드는 GitHub Actions → S3(JAR) → CodeDeploy로 배포</li>
         </ul>
+<figure class="figure"><a href="../assets/img/boaz-web/infra-normal.webp" target="_blank" rel="noopener"><img src="../assets/img/boaz-web/infra-normal.webp" width="1800" height="1020" alt="평시 AWS 인프라: Route 53, CloudFront(API·Admin·Web), 퍼블릭 서브넷 EC2-A, 프라이빗 서브넷 RDS Single-AZ, CodeDeploy 배포" loading="lazy" decoding="async"></a><figcaption>최종 설계 (평시 구조)</figcaption></figure>
         <div class="callout"><p>지켜야 하는 보안을 <strong>오리진 직접 접근 차단 + DB 격리</strong>로 정의하고, 이를 유지하면서 <strong>고정비와 복잡도를 줄이는 선택</strong>을 했습니다.</p></div>
       </div>
     </section>
@@ -135,6 +136,7 @@
 
       <div class="topic">
         <h3>시즌제 전환</h3>
+<figure class="figure"><a href="../assets/img/boaz-web/infra-season.webp" target="_blank" rel="noopener"><img src="../assets/img/boaz-web/infra-season.webp" width="1800" height="1117" alt="모집 기간 AWS 인프라: ALB 뒤 EC2-A·EC2-B 두 AZ, RDS Primary·Standby Multi-AZ" loading="lazy" decoding="async"></a><figcaption>신규 기수 모집 기간의 구조</figcaption></figure>
         <h4>모집 기간에 추가되는 인프라</h4>
         <ul>
           <li>EC2 총 두 대 운영 → ALB로 로드밸런싱</li>
@@ -172,6 +174,8 @@
           <li><strong>평시:</strong> EC2 단독 + RDS. "지금 정상인가"를 게이지로 즉시 확인</li>
           <li><strong>시즌:</strong> EC2 두 대 + RDS의 모든 지표를 시계열로. NetworkIn을 A·B 같은 그래프에 올려 failover 시 A↓ B↑ 전환을 즉시 확인</li>
         </ul>
+<figure class="figure"><a href="../assets/img/boaz-web/dashboard-normal.webp" target="_blank" rel="noopener"><img src="../assets/img/boaz-web/dashboard-normal.webp" width="1800" height="615" alt="평시 CloudWatch 대시보드: EC2-A와 RDS 지표 게이지" loading="lazy" decoding="async"></a><figcaption>평시 대시보드 (게이지)</figcaption></figure>
+<figure class="figure"><a href="../assets/img/boaz-web/dashboard-season.webp" target="_blank" rel="noopener"><img src="../assets/img/boaz-web/dashboard-season.webp" width="1800" height="613" alt="모집 시즌 CloudWatch 대시보드: EC2 A/B CPU·메모리·디스크·상태 점검·네트워크 시계열" loading="lazy" decoding="async"></a><figcaption>시즌 대시보드 (시계열)</figcaption></figure>
         <h4>알람 12종 → SNS → 이메일</h4>
         <p>대시보드를 보지 못할 때 문제가 생겨도 담당자에게 이메일로 알람이 가도록 설정했습니다.</p>
         <div class="table-wrap">

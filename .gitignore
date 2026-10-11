@@ -11,3 +11,6 @@
 .DS_Store
 Thumbs.db
 .vscode/
+
+# 이미지 원본 (웹용은 assets/img)
+/sources/
