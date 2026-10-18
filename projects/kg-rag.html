@@ -59,7 +59,7 @@
       <dd>
         <ul>
           <li>제24회 BOAZ 빅데이터 컨퍼런스 발표 및 데모 부스 진행 (2026.07.25)</li>
-          <li>운영 중 발견한 크롤 DQ 오탐의 원인 분석과 입력 품질 게이트 도입 (2026.09 – 10)</li>
+          <li>운영 중 발견한 크롤 DQ 오탐의 원인 분석과 입력 품질 게이트 도입, 전처리 재실행 멱등화 (2026.09 – 10)</li>
         </ul>
       </dd>
     </dl>
@@ -100,6 +100,7 @@
             <li><a href="#ops-order">고치는 순서: 측정 → 게이트 → 알림</a></li>
             <li><a href="#ops-select">입력 선택 규칙</a></li>
             <li><a href="#ops-backfill">운영 데이터 복구를 위한 Backfill 설계</a></li>
+            <li><a href="#ops-idempotent">재실행 멱등화: 백필 패턴을 정상 파이프라인으로</a></li>
           </ol>
         </li>
       </ol>
@@ -134,6 +135,7 @@
           <li>성분 현행명과 구명칭을 모두 사전에 두어 표기가 바뀐 성분도 매칭</li>
           <li>귀속 불가 상품은 분석 대상에서 제외하되, 버리지 않고 사유를 남김</li>
           <li>운영 개선: 과거 누락 배치 재처리를 위한 별도 Backfill 경로 추가</li>
+          <li>운영 개선: DLQ 자동 재투입 대신 사전 보완. 오류 1,826건 중 82%가 의도된 제외(중복 56%, 번들 26%)이고 3일마다 재수집되므로, 사전만 고치면 다음 배치에서 자동 복구</li>
         </ul>
         <div class="callout">
           <p>성분 매칭 정합성 상시 95%+ 유지 (평상 ≈ 99.1%, 95% 미만 시 알람). 실패는 DLQ(Error)로 격리해 파이프라인 무중단</p>
@@ -159,24 +161,30 @@
         <ul>
           <li>이미지는 ECR에서, 호스트의 DAG 및 설정은 Git에서 각각 최신을 맞춤</li>
           <li>역할을 용도별로 나눠 최소 권한 유지</li>
-          <li>담당 레포지토리 4개, 워크플로우 7개를 전부 이 방식으로 통일</li>
         </ul>
         <div class="table-wrap">
           <table>
             <thead><tr><th>워크플로우</th><th>하는 일</th><th>Assume Role</th></tr></thead>
             <tbody>
               <tr><td><code>build-and-push.yml</code></td><td>이미지 빌드 → ECR push</td><td>GitHubActionsECRRole</td></tr>
-              <tr><td><code>deploy.yml</code></td><td>SSM send-command로 호스트 git pull</td><td>GitHubActionsSSMRole</td></tr>
+              <tr><td><code>deploy.yml</code> (Airflow_Infra)</td><td>SSM으로 git pull + 결과 회수, compose 변경 시 승인 후 재시작</td><td>GitHubActionsSSMRole</td></tr>
+              <tr><td><code>deploy.yml</code> (Monitoring_Infra)</td><td>바뀐 설정의 서비스만 재시작 + 헬스체크 3종</td><td>GitHubActionsSSMRole</td></tr>
             </tbody>
           </table>
         </div>
 
         <h4>키리스 도입</h4>
         <ul>
-          <li>ECR push와 호스트 접근에는 AWS 자격 증명이 필요하다. 통상적으로는 액세스 키를 레포 secrets에 넣지만, 유출 시 회수가 어렵고 주기적으로 교체하는 부담이 있다</li>
-          <li>GitHub OIDC를 IAM 자격 증명 공급자로 등록하고, 워크플로우가 <code>id-token: write</code>로 받은 단기 토큰으로 IAM Role을 assume 하도록 구성</li>
+          <li>레포 secrets에 액세스 키를 두면 유출 시 회수가 어렵고 주기적 교체가 부담</li>
+          <li>GitHub OIDC를 IAM 자격 증명 공급자로 등록하고, 워크플로우가 <code>id-token: write</code>로 받은 단기 토큰으로 IAM Role을 assume → 레포에 AWS 키 없이 배포</li>
         </ul>
-        <div class="callout"><p>레포 secrets에 AWS 액세스 키를 두지 않고도 배포가 가능하도록 구현</p></div>
+
+        <h4>배포 결과 확인과 위험도별 반영 (2026.10)</h4>
+        <ul>
+          <li><strong>SSM 호출 성공 ≠ 배포 성공:</strong> 원격 실행 결과를 회수해 실패를 workflow 실패로 처리 → 첫 실행에서 숨어 있던 git 소유권 문제(dubious ownership)가 바로 드러나 수정</li>
+          <li><strong>위험도별 반영:</strong> 알림과 수집 설정은 머지 즉시 자동 반영하고, 실행 중 태스크를 끊을 수 있는 scheduler 재시작만 GitHub environment 승인 후 반영</li>
+        </ul>
+        <p style="margin-top:8px;font-size:0.9rem">※ 최초 SSM 배포는 팀원이 구현했고, 결과 확인과 자동 반영, 승인 분리는 직접 설계했습니다.</p>
       </div>
     </section>
 
@@ -325,7 +333,7 @@
       <div class="topic" id="mon-alert">
         <h3>Discord 알림 및 리포트 체계</h3>
         <p class="one-liner">대시보드를 계속 보고 있을 수는 없으므로, 메트릭 기반 Discord 알림으로 이상 상황을 즉시 통보받고 파이프라인 완료 리포트도 받도록 구성했습니다.</p>
-        <h4>감시 항목 (총 14종)</h4>
+        <h4>감시 항목 (총 14종, 알림 룰은 머지하면 운영에 자동 반영)</h4>
         <ul>
           <li><strong>데이터:</strong> 크롤 신선도, 전처리 지연, 매칭률 급락, 오류율 상승, 크롤 품질 경고, 전처리 보류</li>
           <li><strong>파이프라인:</strong> DAG 실패, 스케줄러 다운, 크롤 장기 실행, 관측 수집 실패</li>
@@ -350,7 +358,11 @@
           <li>배치 날짜와 데이터 품질 지표를 함께 보내 수행 결과를 한눈에 확인</li>
         </ul>
 <div class="figure-row"><figure class="figure"><a href="../assets/img/kg-rag/report-crawl.webp" target="_blank" rel="noopener"><img src="../assets/img/kg-rag/report-crawl.webp" width="303" height="315" alt="Discord 크롤링 수집 완료 리포트: 배치 2026-10-10, 수집 4,052건, 수집률 99.2%" loading="lazy" decoding="async"></a><figcaption>크롤링 완료 리포트</figcaption></figure><figure class="figure"><a href="../assets/img/kg-rag/report-preprocess.webp" target="_blank" rel="noopener"><img src="../assets/img/kg-rag/report-preprocess.webp" width="256" height="367" alt="Discord 전처리 정제·성분 매칭 완료 리포트: 정상 3,332건, 매칭률 98.9%" loading="lazy" decoding="async"></a><figcaption>전처리 완료 리포트</figcaption></figure><figure class="figure"><a href="../assets/img/kg-rag/alert-disk.webp" target="_blank" rel="noopener"><img src="../assets/img/kg-rag/alert-disk.webp" width="412" height="355" alt="Discord 디스크 부족 알림과 정상화 알림: airflow-ec2 루트 디스크 86.5%에서 76.8%로" loading="lazy" decoding="async"></a><figcaption>디스크 부족 알림과 정상화</figcaption></figure></div>
-        <div class="callout"><p><strong>문제 해결 사례:</strong> 이 알림으로 서버 디스크 부족을 발견. 쓰지 않는 Docker 이미지와 설정 파일을 정리해도 임계치 아래로 내려가지 않아 EBS 볼륨을 30GB에서 40GB로 늘려 해결했습니다.</p></div>
+        <h4>문제 해결 사례</h4>
+        <ul>
+          <li><strong>디스크 부족 알림:</strong> 쓰지 않는 Docker 이미지와 설정 파일을 정리해도 임계치 아래로 내려가지 않아 EBS 볼륨을 30GB에서 40GB로 증설</li>
+          <li><strong>노드 끊김 알림이 저절로 해소되던 버그:</strong> 노드가 15분 넘게 꺼져 있으면 알림이 해소 상태로 바뀌던 문제를 <code>absent_over_time</code>으로 고치고 운영 Prometheus에서 확인</li>
+        </ul>
       </div>
     </section>
 
@@ -358,7 +370,7 @@
     <section class="part" id="ops">
       <p class="part-label">04 · 종료 후 운영 개선 (2026.09 – 10)</p>
       <h2>크롤 DQ 오탐에서 입력 품질 게이트까지</h2>
-      <p class="part-lead">정규 활동이 끝난 뒤에도 파이프라인을 운영하며 발견한 문제를 원인부터 다시 짚고, 측정·판정·알림·복구 경로를 고쳤습니다.</p>
+      <p class="part-lead">정규 활동이 끝난 뒤에도 파이프라인을 운영하며 발견한 문제를 원인부터 다시 짚고, 측정·판정·알림·복구·재실행 경로를 고쳤습니다.</p>
 
       <div class="topic" id="ops-cause">
         <h3>크롤 DQ 오탐 알림: 원인 좁히기</h3>
@@ -503,8 +515,49 @@
         <ul>
           <li>8~9월 배치 7개: 입력 25,830건 → history 17,020행, 7건 모두 유형별 합계 일치</li>
           <li>같은 키를 두 번 apply해도 2,254행 한 벌만 남음 (중복 없이 교체)</li>
-          <li>한계: 날짜별 카테고리가 6~17개로 들쭉날쭉 → <a href="#ops-select">입력 선택 규칙</a>을 백필에도 적용</li>
+          <li>이후: 같은 교체 방식을 정상 파이프라인 전체로 확장 → <a href="#ops-idempotent">재실행 멱등화</a></li>
         </ul>
+      </div>
+
+      <div class="topic" id="ops-idempotent">
+        <h3>재실행 멱등화: 백필 패턴을 정상 파이프라인으로</h3>
+        <p class="one-liner">실패한 태스크를 다시 돌려도 결과가 같도록 쓰기 순서까지 설계하고, 운영 재실행 2회로 확인했습니다.</p>
+        <h4>문제</h4>
+        <p>실패한 태스크를 Clear 후 재실행하면 silver_history, dq_metrics, gold 테이블이 append라 같은 배치가 두 벌 쌓입니다. 운영 DQ를 조회해 보니 같은 batch_date로 2회 이상 돈 정상 실행이 전처리 DAG의 두 단계(bronze_to_silver, silver_to_gold)에서 각각 4개 날짜씩 있었습니다.</p>
+        <h4>설계</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>설계</th><th>이유</th></tr></thead>
+            <tbody>
+              <tr><td>쓰기 순서 history → error → current(마지막) → 재조회 검증 → DQ</td><td>하류 CDC가 history 스냅샷을 비교해 새 상품을 찾으므로, history부터 확정하고 서비스용 current는 마지막에 씀</td></tr>
+              <tr><td>실행 종류별 교체 범위: 정상은 같은 stage·batch_date의 다른 실행 행 교체, 백필은 고정 키 교체, 크롤은 append 유지</td><td>실행마다 "같은 결과"의 기준이 다름. 백필 행과, 한 실행이 나눠 쓴 요약·유형별 기록은 보존</td></tr>
+              <tr><td>gold 단계도 같은 batch_date로 교체, DQ는 gold 쓰기 뒤로</td><td>쓰기가 실패했는데 품질 기록만 남아 정상처럼 보이는 일 방지</td></tr>
+              <tr><td>history와 DQ의 실행 ID를 하나로 통일</td><td>몇 초 차이 나는 다른 값이라 같은 실행의 행을 정확히 찾아 교체할 수 없었음</td></tr>
+              <tr><td>BATCH_DATE가 비면 즉시 실패</td><td>07-15 정제 뒤의 gold 단계가 07-16, 07-17로 기록된 날짜 오염 확인 → 교체 키가 엉뚱한 행을 지울 수 있음</td></tr>
+              <tr><td>재실행이면 Discord 리포트 제목에 (재실행) 표시</td><td>같은 배치의 리포트가 두 번 와도 사람이 구분할 수 있게</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h4>검증 (배포 후, 운영 데이터)</h4>
+        <ul>
+          <li><strong>배포 직후 버그:</strong> 첫 정상 실행 전에 기준값을 조회하다 발견. 행에 찍힌 값(작업 이름)과 교체 키(실행 ID)가 달라 교체와 검증이 동작하지 않는 상태 → 실행 ID로 통일</li>
+          <li><strong>계약 테스트:</strong> mock으로 가린 단위 테스트는 통과했음 → 실제 행 값으로 교체와 검증을 확인하는 테스트를 추가하고, 수정 전 코드에서 실패하는지 확인</li>
+          <li><strong>독립 리뷰:</strong> 다른 AI에 검토를 맡겨 지적 반영 (0건 쓰기 전 중단, 정상 실행 중 백필 apply 거부 등)</li>
+          <li><strong>다음 배치:</strong> 10/19 크롤 뒤 자연 첫 실행과 silver_to_gold의 gold 테이블 교체 확인 예정</li>
+        </ul>
+        <h4>운영 재실행 (10/17, 10-16 배치 정제 단계만 2회)</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>항목</th><th>재실행 전</th><th>1차</th><th>2차</th></tr></thead>
+            <tbody>
+              <tr><td>10-16 history 행</td><td>3,348</td><td>3,348</td><td>3,348</td></tr>
+              <tr><td>history 전체 행</td><td>–</td><td>282,693</td><td>282,693</td></tr>
+              <tr><td>DQ 실행 수</td><td>1</td><td>1</td><td>1</td></tr>
+              <tr><td>history 스냅샷</td><td>101</td><td>103</td><td>105</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout"><p><strong>교훈:</strong> mock으로 가린 단위 테스트는 데이터 계약을 검증하지 못한다. 배포 직후 운영 기준값부터 재고, 실제 행에 찍히는 값으로 확인한다.</p></div>
       </div>
     </section>
 
