@@ -59,6 +59,7 @@
       <dd>
         <ul>
           <li>제24회 BOAZ 빅데이터 컨퍼런스 발표 및 데모 부스 진행 (2026.07.25)</li>
+          <li>종료 후 서버 중단 기간의 누락 배치 7개를 백필로 복구 (2026.09)</li>
           <li>운영 중 발견한 크롤 DQ 오탐의 원인 분석과 입력 품질 게이트 도입, 전처리 재실행 멱등화 (2026.09 – 10)</li>
         </ul>
       </dd>
@@ -83,7 +84,7 @@
       <h2 id="toc-title">목차</h2>
       <ol>
         <li><a href="#pipeline">데이터 전처리 파이프라인 설계</a></li>
-        <li><a href="#cicd">CI/CD: 컨테이너 배포와 키리스 인증</a></li>
+        <li><a href="#cicd">CI/CD: 키리스 인증과 결과를 확인하는 배포</a></li>
         <li><a href="#monitoring">통합 모니터링 구축</a>
           <ol>
             <li><a href="#mon-background">배경</a></li>
@@ -147,7 +148,7 @@
     <!-- 2. CI/CD -->
     <section class="part" id="cicd">
       <p class="part-label">02</p>
-      <h2>CI/CD: 컨테이너 배포와 키리스 인증</h2>
+      <h2>CI/CD: 키리스 인증과 결과를 확인하는 배포</h2>
 
       <div class="topic">
         <h3>구축 배경</h3>
@@ -176,14 +177,16 @@
         <h4>키리스 도입</h4>
         <ul>
           <li>레포 secrets에 액세스 키를 두면 유출 시 회수가 어렵고 주기적 교체가 부담</li>
-          <li>GitHub OIDC를 IAM 자격 증명 공급자로 등록하고, 워크플로우가 <code>id-token: write</code>로 받은 단기 토큰으로 IAM Role을 assume → 레포에 AWS 키 없이 배포</li>
+          <li>GitHub OIDC로 받은 단기 토큰으로 IAM Role을 assume → 레포에 AWS 키 없이 배포</li>
         </ul>
 
         <h4>배포 결과 확인과 위험도별 반영 (2026.10)</h4>
         <ul>
-          <li><strong>SSM 호출 성공 ≠ 배포 성공:</strong> 원격 실행 결과를 회수해 실패를 workflow 실패로 처리 → 첫 실행에서 숨어 있던 git 소유권 문제(dubious ownership)가 바로 드러나 수정</li>
+          <li><strong>SSM 호출 성공 ≠ 배포 성공:</strong> 원격 git pull이 실패해도 초록불이던 배포를, 결과를 회수해 실패로 처리하도록 변경 → 첫 실행에서 숨어 있던 git 소유권 문제가 바로 드러나 수정</li>
           <li><strong>위험도별 반영:</strong> 알림과 수집 설정은 머지 즉시 자동 반영하고, 실행 중 태스크를 끊을 수 있는 scheduler 재시작만 GitHub environment 승인 후 반영</li>
+          <li><strong>승인 경로 검증:</strong> compose에 주석만 바꾼 PR로 감지 → 승인 → 재시작 → 헬스체크 OK. 설정 변화가 없어 scheduler가 재생성되지 않으므로, 태스크 중단 위험 없이 흐름 전체를 확인</li>
         </ul>
+<figure class="figure"><a href="../assets/img/kg-rag/cicd-approval.webp" target="_blank" rel="noopener"><img src="../assets/img/kg-rag/cicd-approval.webp" width="958" height="766" alt="GitHub Actions 실행 화면: deploy 잡은 완료, restart 잡은 airflow-restart environment 승인을 기다리는 중" loading="lazy" decoding="async"></a><figcaption>compose 변경 PR: deploy 후 restart가 승인을 기다렸다가 재시작</figcaption></figure>
         <p style="margin-top:8px;font-size:0.9rem">※ 최초 SSM 배포는 팀원이 구현했고, 결과 확인과 자동 반영, 승인 분리는 직접 설계했습니다.</p>
       </div>
     </section>
@@ -521,7 +524,7 @@
 
       <div class="topic" id="ops-idempotent">
         <h3>재실행 멱등화: 백필 패턴을 정상 파이프라인으로</h3>
-        <p class="one-liner">실패한 태스크를 다시 돌려도 결과가 같도록 쓰기 순서까지 설계하고, 운영 재실행 2회로 확인했습니다.</p>
+        <p class="one-liner">실패한 태스크를 다시 돌려도 결과가 같도록 설계하고, 운영 재실행 2회와 다음 정상 배치로 확인했습니다.</p>
         <h4>문제</h4>
         <p>실패한 태스크를 Clear 후 재실행하면 silver_history, dq_metrics, gold 테이블이 append라 같은 배치가 두 벌 쌓입니다. 운영 DQ를 조회해 보니 같은 batch_date로 2회 이상 돈 정상 실행이 전처리 DAG의 두 단계(bronze_to_silver, silver_to_gold)에서 각각 4개 날짜씩 있었습니다.</p>
         <h4>설계</h4>
@@ -543,7 +546,7 @@
           <li><strong>배포 직후 버그:</strong> 첫 정상 실행 전에 기준값을 조회하다 발견. 행에 찍힌 값(작업 이름)과 교체 키(실행 ID)가 달라 교체와 검증이 동작하지 않는 상태 → 실행 ID로 통일</li>
           <li><strong>계약 테스트:</strong> mock으로 가린 단위 테스트는 통과했음 → 실제 행 값으로 교체와 검증을 확인하는 테스트를 추가하고, 수정 전 코드에서 실패하는지 확인</li>
           <li><strong>독립 리뷰:</strong> 다른 AI에 검토를 맡겨 지적 반영 (0건 쓰기 전 중단, 정상 실행 중 백필 apply 거부 등)</li>
-          <li><strong>다음 배치:</strong> 10/19 크롤 뒤 자연 첫 실행과 silver_to_gold의 gold 테이블 교체 확인 예정</li>
+          <li><strong>10-19 배치 (새 코드의 첫 자연 실행):</strong> (재실행) 표시 없음, 단계별 DQ 1 run, history 3,357행과 gold(frequency 900행, change_log 4행) 한 벌, 10-16 행 보존</li>
         </ul>
         <h4>운영 재실행 (10/17, 10-16 배치 정제 단계만 2회)</h4>
         <div class="table-wrap">
@@ -563,7 +566,7 @@
 
     <nav class="pager" aria-label="프로젝트 이동">
       <a href="../#projects"><small>목록</small>← 전체 프로젝트</a>
-      <a class="next" href="boaz-web.html"><small>다음 프로젝트</small>BOAZ 공식 웹 사이트 →</a>
+      <a class="next" href="boaz-web.html"><small>다음 프로젝트</small>BOAZ 공식 웹사이트 →</a>
     </nav>
     <button class="to-top" type="button" aria-label="맨 위로 이동" hidden>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>

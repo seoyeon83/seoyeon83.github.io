@@ -11,7 +11,7 @@
 ```
 index.html            첫 화면: 프로필 · 일하는 방식 · 프로젝트 요약 · 기술 스택 · 자격증 · 학력/활동
 projects/kg-rag.html  KG-RAG 기반 화장품 추천 시스템 (Team 4EVR0)
-projects/boaz-web.html BOAZ 공식 웹 사이트
+projects/boaz-web.html BOAZ 공식 웹사이트
 projects/elixir.html  엘릭서: 저속노화 식단 관리 서비스
 assets/style.css      공통 스타일 (색상 토큰은 :root 에 정의)
 assets/theme.js       다크 모드 토글
