@@ -60,7 +60,7 @@
         <ul>
           <li>제24회 BOAZ 빅데이터 컨퍼런스 발표 및 데모 부스 진행 (2026.07.25)</li>
           <li>종료 후 서버 중단 기간의 누락 배치 7개를 백필로 복구 (2026.09)</li>
-          <li>운영 중 발견한 크롤 DQ 오탐의 원인 분석과 입력 품질 게이트 도입, 전처리 재실행 멱등화 (2026.09 – 10)</li>
+          <li>종료 후 SRE 스터디를 계기로 관측과 알림을 다시 점검: 크롤 DQ 오탐 원인 분석과 입력 품질 게이트, 데이터 나이 SLO 정의, 전처리 재실행 멱등화 (2026.09 – 10)</li>
         </ul>
       </dd>
     </dl>
@@ -423,6 +423,7 @@
               <li>bronze 로드 직전, 실제로 읽을 파일 목록으로 판정 (별도 태스크면 판정과 로드 사이에 입력이 바뀜)</li>
               <li>자동 트리거와 수동 실행 모두 같은 게이트 통과</li>
               <li>판정 기준은 게이트 코드 한 곳에만</li>
+              <li>AI는 크롤 DAG 끝을 제안했지만, 수동 실행이 검사를 건너뛰는 경로가 있어 기각</li>
             </ul>
           </li>
           <li><strong>알림 재설계 <small>· Grafana</small></strong>
@@ -483,7 +484,7 @@
           <div class="metric"><div class="value">258 → 대체</div><div class="label">9/25 에센스 반쪽 데이터를 이전 run으로 대체. 그 밖의 선택은 기존과 동일</div></div>
           <div class="metric"><div class="value">96.1%</div><div class="label">운영기 데이터 나이 SLO(≤ 3크롤, 약 9일) 달성률 (493/513)</div></div>
           <div class="metric"><div class="value">13개</div><div class="label">백필(0822 run) 재실행 시 이전 run으로 채울 수 있는 카테고리 (기존 6개)</div></div>
-          <div class="metric"><div class="value">51개</div><div class="label">단위 테스트. 외부 리뷰가 찾은 버그 2건(경쟁 조건, 무결성 합계 상쇄)을 재현한 뒤 수정</div></div>
+          <div class="metric"><div class="value">51개</div><div class="label">단위 테스트. 다른 AI의 독립 리뷰가 찾은 버그 2건(경쟁 조건, 무결성 합계 상쇄)을 재현한 뒤 수정</div></div>
         </div>
         <div class="callout"><p><strong>첫 운영 적용 (10/11, batch 10/10):</strong> 정상 완료. silver 3,332행 전부 source_run_id 기록 → 한 배치에 크롤 run 4개가 섞인 것이 행 단위로 처음 보이게 됨. 대체 경로는 아직 실운영에서 발동되지 않음.</p></div>
 <figure class="figure"><a href="../assets/img/kg-rag/report-input-gate.webp" target="_blank" rel="noopener"><img src="../assets/img/kg-rag/report-input-gate.webp" width="1075" height="244" alt="입력 품질 게이트 리포트: 배치 2026-10-10, 판정 경고, 누락 7건, 연속 누락 2건, 최대 데이터 나이 9일" loading="lazy" decoding="async"></a><figcaption>입력 품질 게이트 리포트 (batch 2026-10-10)</figcaption></figure>

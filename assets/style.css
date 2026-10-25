@@ -147,7 +147,7 @@ main.container { padding-top: 48px; padding-bottom: 80px; }
 .btn.primary { font-weight: 600; }
 
 /* 일하는 방식 */
-.strengths { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.strengths { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px 32px; }
 .strength h3 { font-size: 0.98rem; margin-bottom: 4px; }
 .strength p { color: var(--text-sub); font-size: 0.92rem; }
 
@@ -305,6 +305,7 @@ tr.chosen td:last-child::after { content: " ✓"; }
 .figure img { display: block; max-width: 100%; height: auto; }
 .figure.tall img { max-height: 560px; object-fit: cover; object-position: top; }
 .figure figcaption { margin-top: 6px; font-size: 0.84rem; color: var(--text-muted); text-align: center; }
+.table-wrap caption { caption-side: bottom; margin-top: 6px; font-size: 0.84rem; color: var(--text-muted); text-align: center; }
 .figure-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; align-items: start; margin-top: 18px; }
 .figure-row .figure { margin: 0; }
 .figure-row .figure > a { background: #1e1f22; }

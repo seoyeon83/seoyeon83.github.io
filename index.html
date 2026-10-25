@@ -80,6 +80,10 @@
           <h3>반복되는 운영을 남깁니다</h3>
           <p>같은 문제가 다시 생겨도 누구나 같은 방식으로 대응할 수 있도록 절차와 설정을 코드와 문서로 남깁니다.</p>
         </div>
+        <div class="strength">
+          <h3>AI와 일하는 규칙을 둡니다</h3>
+          <p>구현과 테스트는 AI가 하되, 설계 합의 전 수정 금지와 승인 후 배포 규칙을 둡니다. 결과는 독립 리뷰와 운영 데이터 재조회로 다시 확인합니다.</p>
+        </div>
       </div>
     </section>
 
@@ -99,7 +103,7 @@
             <li>Iceberg 메달리온(Bronze/Silver/Gold) 전처리 파이프라인 설계. Aho-Corasick 성분 매칭으로 <strong>사전 완전탐색 대비 약 200배대 속도</strong>, 매칭 정합성 평상 <strong>≈ 99.1%</strong></li>
             <li>홈서버·EC2·GPU 서버 등 <strong>5개 이기종 실행 환경</strong>의 메트릭·로그를 Grafana로 통합하고, Airflow·데이터 정합성 대시보드와 <strong>Discord 알림 14종</strong> 설계</li>
             <li>GitHub OIDC로 <strong>액세스 키 없는 CI/CD</strong> 구성, 배포 결과 회수와 위험도별 반영(승인 분리) 설계</li>
-            <li>종료 후 운영 개선: 크롤 DQ 오탐을 4개 층위로 분석해 <strong>입력 품질 게이트</strong>와 카테고리 단위 입력 선택 규칙 도입, 백필로 누락 배치 7개 복구, 전처리 <strong>재실행 멱등화</strong></li>
+            <li>종료 후 운영 개선: 크롤 DQ 오탐을 4개 층위로 분석해 <strong>입력 품질 게이트</strong>와 카테고리 단위 입력 선택 규칙 도입, 백필로 누락 배치 7개 복구, 전처리 <strong>재실행 멱등화</strong> (데이터 나이 SLO 달성률 96.1%, 과거 재생 기준)</li>
           </ul>
           <ul class="tags" aria-label="사용 기술">
             <li>Airflow</li><li>Iceberg</li><li>AWS</li><li>Prometheus</li><li>Grafana</li><li>Loki</li><li>FastAPI</li><li>DuckDB</li><li>GitHub Actions</li>
@@ -120,7 +124,7 @@
           <ul>
             <li>부하 테스트로 마감 피크에도 t3.small 한 대로 충분함을 확인하고, <strong>오리진 직접 접근 차단 + DB 격리</strong>를 지키는 CloudFront + 퍼블릭 EC2 구조로 고정비와 복잡도를 줄임</li>
             <li>고가용성을 모집 기간(연 4주)에만 켜는 <strong>시즌제 인프라</strong> 설계, 상시 이중화 대비 <strong>연 40% 이상 비용 절감</strong>. 시즌 전환은 Bash 스크립트로 자동화</li>
-            <li>CloudWatch + SNS 알람 12종 구성, CloudFront 에러 응답 TTL로 인한 로그인 장애 원인 규명</li>
+            <li>CloudWatch + SNS 알람 12종 구성. 로그인 장애를 남은 지표로 재분석해 <strong>처음 진단(CloudFront 오류 캐시)을 기각</strong>하고 WAF 요청 수 제한으로 원인 정정</li>
           </ul>
           <ul class="tags" aria-label="사용 기술">
             <li>Spring Boot</li><li>EC2</li><li>RDS</li><li>CloudFront</li><li>ALB</li><li>CodeDeploy</li><li>CloudWatch</li><li>Terraform</li>
