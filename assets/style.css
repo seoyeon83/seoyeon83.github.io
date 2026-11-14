@@ -316,6 +316,41 @@ tr.chosen td:last-child::after { content: " ✓"; }
 .symptom-metrics .metric { padding: 14px 0; }
 .symptom-metrics .metric:last-child { border-bottom: 1px solid var(--rule); }
 
+/* 일하는 방식: 적용한 곳 */
+.strength .applied { margin-top: 4px; font-size: 0.86rem; color: var(--text-muted); }
+.strength .applied b { font-weight: 600; color: var(--text-sub); margin-right: 6px; }
+.strength .applied a { color: var(--text-muted); text-decoration-color: color-mix(in srgb, var(--text-muted) 45%, transparent); }
+.strength .applied a:hover { color: var(--text-sub); text-decoration-color: currentColor; }
+
+/* 상세 개요: 규모 숫자 아래 보조 설명 */
+.metric .sub { font-size: 0.82rem; color: var(--text-muted); }
+.overview-heading { font-size: 1rem; font-weight: 700; margin-top: 32px; }
+
+/* 주요 기여: 제목 / 설명 / 핵심 수치, 구분선 행 */
+.contrib { margin: 8px 0 0; padding: 0; list-style: none; }
+.contrib li { display: grid; grid-template-columns: 9em 1fr; gap: 2px 16px; padding: 9px 0; margin: 0; border-top: 1px solid var(--rule); font-size: 0.93rem; }
+.contrib li:last-child { border-bottom: 1px solid var(--rule); }
+.contrib .name { font-weight: 650; color: var(--text); }
+.contrib .desc { color: var(--text-sub); }
+.contrib .result { grid-column: 2; color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.achievement { margin-top: 12px; font-size: 0.93rem; color: var(--text-sub); }
+.achievement strong { color: var(--text); margin-right: 10px; }
+
+/* 번호 흐름: 화살표 대신 번호로 순서를 보인다 */
+.flow-grid { counter-reset: fstep; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0 0; padding: 0; list-style: none; }
+.flow-grid li { counter-increment: fstep; margin: 0; border: 1px solid var(--rule); padding: 8px 12px 10px; font-size: 0.88rem; color: var(--text-sub); }
+.flow-grid li::before { content: counter(fstep); display: block; font-size: 0.78rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.flow-grid li strong { display: block; color: var(--text); }
+.flow-grid li.auto { border-color: var(--rule-strong); }
+.flow-grid li.auto::before { content: counter(fstep) " · 자동"; }
+
+@media (max-width: 720px) {
+  .contrib li { grid-template-columns: 1fr; }
+  .contrib .result { grid-column: 1; }
+  .flow-grid { grid-template-columns: 1fr; }
+}
+
 @media (max-width: 720px) {
   main.container { padding-top: 32px; }
   .hero { flex-direction: column; gap: 16px; }

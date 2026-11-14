@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>KG-RAG 기반 화장품 추천 시스템 | 김서연</title>
-  <meta name="description" content="Iceberg 메달리온 파이프라인, OIDC CI/CD, 5개 이기종 환경 통합 모니터링, 크롤 DQ 오탐 분석과 입력 품질 게이트, 백필 설계.">
+  <meta name="description" content="Iceberg 메달리온 파이프라인, OIDC CI/CD, 5개 실행 환경 통합 모니터링, 크롤 DQ 오탐 분석과 입력 품질 게이트, 재실행 멱등화, 베타 서비스 관측.">
   <meta property="og:type" content="article">
   <meta property="og:title" content="KG-RAG 기반 화장품 추천 시스템 | 김서연">
   <meta property="og:description" content="데이터 파이프라인 · AWS 인프라 · 통합 모니터링 담당">
@@ -42,27 +42,9 @@
 
     <dl class="info-grid">
       <dt>소속</dt><dd>빅데이터 연합 동아리 BOAZ 25기 데이터 엔지니어링</dd>
-      <dt>기간</dt><dd>2026.01 – 2026.07 정규 활동, 2026.08 – 현재 운영 및 개선</dd>
+      <dt>기간</dt><dd>2026.01 – 2026.07 정규 활동<br>2026.09 – 2026.11 종료 후 운영 개선, 베타 운영 후 종료</dd>
       <dt>팀</dt><dd>Team 4EVR0 (4인)</dd>
       <dt>역할</dt><dd>데이터 파이프라인 설계 · AWS 인프라 구성 및 운영 · 통합 모니터링 및 알림 구축</dd>
-      <dt>담당 범위</dt>
-      <dd>
-        <ul>
-          <li>Iceberg 기반 메달리온 아키텍처(Bronze / Silver / Gold) 설계</li>
-          <li>데이터 전처리 파이프라인 및 backfill 설계</li>
-          <li>워크플로우 오케스트레이션(DAG) 설계</li>
-          <li>AWS 기반 인프라 구성 및 운영</li>
-          <li>5개 이기종 실행 환경 통합 모니터링 체계 구축</li>
-        </ul>
-      </dd>
-      <dt>성과</dt>
-      <dd>
-        <ul>
-          <li>제24회 BOAZ 빅데이터 컨퍼런스 발표 및 데모 부스 진행 (2026.07.25)</li>
-          <li>종료 후 서버 중단 기간의 누락 배치 7개를 백필로 복구 (2026.09)</li>
-          <li>종료 후 SRE 스터디를 계기로 관측과 알림을 다시 점검: 크롤 DQ 오탐 원인 분석과 입력 품질 게이트, 데이터 나이 SLO 정의, 전처리 재실행 멱등화 (2026.09 – 10)</li>
-        </ul>
-      </dd>
     </dl>
 
     <div class="repo-links" aria-label="저장소 링크">
@@ -72,12 +54,25 @@
       <a href="https://github.com/4EVR0/Airflow_Infra" target="_blank" rel="noopener noreferrer">Airflow <span>Airflow_Infra ↗</span></a>
     </div>
 
+    <h2 class="overview-heading">규모</h2>
     <div class="metrics">
-      <div class="metric"><div class="value">≈ 99.1%</div><div class="label">평상시 성분 매칭 정합성 (95% 미만 시 알람)</div></div>
-      <div class="metric"><div class="value">약 200배대</div><div class="label">Aho-Corasick 도입, 사전 완전탐색 대비 매칭 속도</div></div>
-      <div class="metric"><div class="value">5개 환경</div><div class="label">이기종 실행 환경 메트릭·로그 통합</div></div>
-      <div class="metric"><div class="value">0개</div><div class="label">레포 secrets에 둔 AWS 액세스 키 (OIDC)</div></div>
+      <div class="metric"><div class="value">5곳</div><div class="label">흩어진 실행 환경</div><div class="sub">홈서버, EC2 4대, GPU 서버, RDS</div></div>
+      <div class="metric"><div class="value">200회+</div><div class="label">파이프라인 실행 기록</div><div class="sub">크롤 67회, 전처리와 백필 등 EC2 DAG 137회</div></div>
+      <div class="metric"><div class="value">10개+</div><div class="label">코드 저장소</div><div class="sub">파이프라인, 공통 모듈, 인프라, 모니터링, 앱</div></div>
+      <div class="metric"><div class="value">약 12만</div><div class="label">지식 그래프 관계 수</div><div class="sub">상품 3,393개와 성분 3,221개를 연결</div></div>
     </div>
+
+    <h2 class="overview-heading">주요 기여</h2>
+    <ul class="contrib">
+      <li><span class="name"><a href="#pipeline">전처리 파이프라인</a></span><span class="desc">Iceberg 메달리온 설계, Aho-Corasick 성분 매칭</span><span class="result">매칭률 99%대, 완전탐색 대비 약 200배</span></li>
+      <li><span class="name"><a href="#cicd">CI/CD</a></span><span class="desc">GitHub OIDC 키리스 배포, 배포 결과 회수, 재시작 승인 분리</span><span class="result">레포 4개, 워크플로 7개 통일</span></li>
+      <li><span class="name"><a href="#monitoring">통합 모니터링</a></span><span class="desc">5개 실행 환경의 지표와 로그를 Grafana 하나로</span><span class="result">대시보드 2종 전담, 알림 14종</span></li>
+      <li><span class="name"><a href="#ops">운영 개선</a></span><span class="desc">크롤 DQ 오탐 원인 분석, 입력 품질 게이트, 재실행 멱등화, 백필</span><span class="result">데이터 나이 SLO 96.1%, 누락 배치 7개 복구</span></li>
+      <li><span class="name"><a href="#beta">베타 관측</a></span><span class="desc">저트래픽 알림 6종 설계 (요청 563건, 사용자 63명)</span><span class="result">GPU 정지 3회 모두 3분 내 감지, 배포 오탐 0건</span></li>
+    </ul>
+    <p class="achievement"><strong>성과</strong>제24회 BOAZ 빅데이터 컨퍼런스 발표 및 데모 부스 (2026.07.25)</p>
+
+    <figure class="figure tall"><a href="../assets/img/kg-rag/service-ui.webp" target="_blank" rel="noopener"><img src="../assets/img/kg-rag/service-ui.webp" width="1339" height="1279" alt="4EVR0 스킨케어 컨시어지 베타 화면: 피부 고민을 자연어로 입력하는 상담 화면과 건조함·민감함·트러블 추천 카드" loading="lazy" decoding="async"></a><figcaption>베타 서비스 화면</figcaption></figure>
 
     <figure class="figure"><a href="../assets/img/kg-rag/architecture.webp" target="_blank" rel="noopener"><img src="../assets/img/kg-rag/architecture.webp" width="1800" height="764" alt="홈서버, AWS(Airflow EC2, GraphRAG EC2, Iceberg 레이크하우스, 모니터링 서버, Neo4j), 웹 서버, vast.ai vLLM으로 구성된 전체 시스템 아키텍처" decoding="async"></a><figcaption>전체 시스템 아키텍처</figcaption></figure>
     <nav class="toc" aria-labelledby="toc-title">
@@ -87,23 +82,22 @@
         <li><a href="#cicd">CI/CD: 키리스 인증과 결과를 확인하는 배포</a></li>
         <li><a href="#monitoring">통합 모니터링 구축</a>
           <ol>
-            <li><a href="#mon-background">배경</a></li>
-            <li><a href="#mon-process">과정</a></li>
+            <li><a href="#mon-background">흩어진 5개 환경을 한 화면으로</a></li>
             <li><a href="#mon-airflow">Airflow 대시보드</a></li>
             <li><a href="#mon-dq">데이터 정합성 대시보드</a></li>
-            <li><a href="#mon-trial">시행착오: 로그 파싱에서 API 서빙으로</a></li>
-            <li><a href="#mon-alert">Discord 알림 및 리포트</a></li>
+            <li><a href="#mon-alert">Discord 알림과 파이프라인 리포트</a></li>
           </ol>
         </li>
         <li><a href="#ops">종료 후 운영 개선 (2026.09 – 10)</a>
           <ol>
             <li><a href="#ops-cause">크롤 DQ 오탐 알림: 원인 좁히기</a></li>
-            <li><a href="#ops-order">고치는 순서: 측정 → 게이트 → 알림</a></li>
-            <li><a href="#ops-select">입력 선택 규칙</a></li>
+            <li><a href="#ops-order">DQ 해결 (1): 측정 → 게이트 → 알림</a></li>
+            <li><a href="#ops-select">DQ 해결 (2): 카테고리 단위로 믿을 데이터 고르기</a></li>
             <li><a href="#ops-backfill">운영 데이터 복구를 위한 Backfill 설계</a></li>
             <li><a href="#ops-idempotent">재실행 멱등화: 백필 패턴을 정상 파이프라인으로</a></li>
           </ol>
         </li>
+        <li><a href="#beta">베타 서비스 관측: 트래픽이 거의 없는 서비스의 알림 설계</a></li>
       </ol>
     </nav>
 
@@ -149,12 +143,13 @@
     <section class="part" id="cicd">
       <p class="part-label">02</p>
       <h2>CI/CD: 키리스 인증과 결과를 확인하는 배포</h2>
+      <p class="part-lead">SSM 호출 성공을 배포 성공으로 보지 않도록 결과를 회수하고, 실행 중 태스크를 끊을 수 있는 재시작만 승인을 거치게 했습니다.</p>
 
       <div class="topic">
         <h3>구축 배경</h3>
         <p class="one-liner">DAG 내 스테이지를 독립 컨테이너(DockerOperator)로 끊어 설계 → 코드 변경이 이미지로 반영되어야 실제 실행에 적용되는 구조</p>
         <ul style="margin-top:10px">
-          <li><strong>이미지:</strong> 손으로 하면 4개 레포에서 이미지 빌드 후 ECR push를 매번 반복해야 한다</li>
+          <li><strong>이미지:</strong> 손으로 하면 4개 레포에 이미지 빌드 후 ECR push를 매번 반복해야 한다</li>
           <li><strong>호스트:</strong> DAG 정의와 compose 설정은 Git에 있는데, 서버에 직접 붙어 작업하는 일이 잦아 git pull을 빼먹고 실행 코드와 레포지토리가 어긋나는 일이 반복됐다</li>
         </ul>
 
@@ -182,7 +177,7 @@
 
         <h4>배포 결과 확인과 위험도별 반영 (2026.10)</h4>
         <ul>
-          <li><strong>SSM 호출 성공 ≠ 배포 성공:</strong> 원격 git pull이 실패해도 초록불이던 배포를, 결과를 회수해 실패로 처리하도록 변경 → 첫 실행에서 숨어 있던 git 소유권 문제가 바로 드러나 수정</li>
+          <li><strong>SSM 호출 성공 ≠ 배포 성공:</strong> 원격 git pull이 실패해도 초록불이던 배포를, 결과를 회수해 실패로 처리하도록 변경 → 첫 실행에서 숨어 있던 소유권 문제가 바로 드러나 수정</li>
           <li><strong>위험도별 반영:</strong> 알림과 수집 설정은 머지 즉시 자동 반영하고, 실행 중 태스크를 끊을 수 있는 scheduler 재시작만 GitHub environment 승인 후 반영</li>
           <li><strong>승인 경로 검증:</strong> compose에 주석만 바꾼 PR로 감지 → 승인 → 재시작 → 헬스체크 OK. 설정 변화가 없어 scheduler가 재생성되지 않으므로, 태스크 중단 위험 없이 흐름 전체를 확인</li>
         </ul>
@@ -194,15 +189,16 @@
     <!-- 3. 모니터링 -->
     <section class="part" id="monitoring">
       <p class="part-label">03</p>
-      <h2>통합 모니터링 구축</h2>
-      <p class="part-lead">사람이 보고 있지 않아도 증상이 드러나야 한다. 대시보드는 증상을 보이게, 알람은 보지 않을 때 알리게.</p>
+      <h2>통합 모니터링</h2>
+      <p class="part-lead">사람이 보고 있지 않아도 증상이 드러나야 한다. 대시보드는 증상을 보이게, 알림은 보지 않을 때 알리게.</p>
 
       <div class="topic" id="mon-background">
-        <h3>배경</h3>
+        <h3>흩어진 5개 환경을 한 화면으로</h3>
+        <p class="one-liner">수집 경로는 환경마다 달라도 라벨을 통일해, 지표에서 해당 작업의 로그까지 한 화면에서 이어 봅니다.</p>
         <h4>문제</h4>
         <ul>
-          <li><strong>파이프라인이 실패했을 때 증상이 어디에도 드러나지 않았다.</strong> 크롤링은 홈서버, 전처리는 EC2, 서빙은 vast.ai GPU와 웹 서버에 흩어져 있어 실패를 알아차리는 방법이 사람이 직접 들어가 보는 것뿐이었다.</li>
-          <li>더 큰 문제는 <strong>DAG가 성공해도 결과가 틀릴 수 있다</strong>는 것. 오케스트레이션이 녹색이어도 매칭률이 떨어지면 잘못된 데이터가 그대로 그래프에 적재되고, 우리는 그걸 알 수 없다.</li>
+          <li>실행 환경이 홈서버, EC2, GPU 클라우드, 웹 서버에 흩어져 실패를 알려면 사람이 직접 접속해야 했다</li>
+          <li>DAG가 성공해도 결과가 틀릴 수 있다</li>
         </ul>
         <h4>무엇을 보이게 만들 것인가</h4>
         <div class="table-wrap">
@@ -216,155 +212,122 @@
             </tbody>
           </table>
         </div>
-      </div>
-
-      <div class="topic" id="mon-process">
-        <h3>과정</h3>
-        <p class="one-liner">수집 경로는 넷으로 갈렸지만, 라벨을 통일해 한 화면에서 로그까지 이어지게 했습니다.</p>
 <figure class="figure"><a href="../assets/img/kg-rag/monitoring-diagram.webp" target="_blank" rel="noopener"><img src="../assets/img/kg-rag/monitoring-diagram.webp" width="1450" height="988" alt="Airflow EC2와 홈서버는 Alloy로 Loki·Prometheus에 push하고 Iceberg dq_metrics는 dq_api로, 웹 서비스와 vLLM은 Prometheus pull로 Grafana에 모이는 모니터링 구조도" loading="lazy" decoding="async"></a><figcaption>모니터링 구조도</figcaption></figure>
-        <ol class="steps">
-          <li><strong>팀원의 모니터링 작업을 이어서 작업</strong>
-            <ul><li>팀원이 Prometheus + Grafana로 웹 서비스와 vLLM을 pull 방식으로 연결해 둔 상태 (x86, Tailscale 기반)</li></ul>
-          </li>
-          <li><strong>서버 아키텍처 마이그레이션</strong>
-            <ul><li>x86이던 스택 전체를 t4g(ARM) 한 대로 올리면 다른 인스턴스와 스택 일관성을 유지하고 인스턴스 단가도 줄일 수 있어 ARM으로 마이그레이션</li></ul>
-          </li>
-          <li><strong>관측 범위 확장 (Airflow EC2 및 홈서버)</strong>
-            <ul>
-              <li>홈서버: 다른 tailnet이라 중앙에서 도달 불가 → push만 가능</li>
-              <li>Airflow EC2: 도달은 되지만 태스크 로그를 파일로 tail해야 해 로컬 에이전트가 필수 → 띄운 에이전트로 메트릭도 함께 전송</li>
-              <li>갈림의 기준은 상시 가동 여부가 아니라 <strong>로그까지 걷어야 하는가 vs 자체 /metrics를 노출하는가</strong></li>
-              <li>로컬 에이전트로 <strong>Grafana Alloy</strong> 도입: 각 호스트에서 exporter를 스크레이프해 Prometheus로 remote_write, 로그는 파일을 tail해 Loki로 push</li>
-            </ul>
-          </li>
-          <li><strong>데이터 정합성 지표 추가 (dq_api)</strong>
-            <ul><li>파이프라인 품질 지표는 실시간 스크레이프 대상이 아니라 배치 산출물이라, Iceberg에 적재한 뒤 FastAPI로 서빙해 Grafana가 질의하는 경로를 따로 개발</li></ul>
-          </li>
-          <li><strong>Airflow 실행 상태 수집 추가</strong>
-            <ul>
-              <li>StatsD는 끝난 실행의 집계라서 "지금 무엇이 돌고 있는지"를 알 수 없었음</li>
-              <li>각 Airflow 호스트에 REST API를 조회하는 exporter를 docker-compose로 배포. 홈서버는 호스트 로컬에서 수집하고 기존 Alloy push 경로를 재사용</li>
-            </ul>
-          </li>
-          <li><strong>남긴 것</strong>
-            <ul>
-              <li>기존 pull 경로(웹 서비스, vLLM)는 Tailscale로 도달 가능하고 자체 /metrics를 노출하므로 마이그레이션하지 않고 유지</li>
-              <li>Neo4j는 DB 담당 팀원이 Grafana 플러그인으로 직접 질의하도록 구성해 둔 것을 그대로 유지</li>
-            </ul>
-          </li>
-        </ol>
-        <div class="callout"><p>라벨을 <code>job</code> · <code>host</code> · <code>dag_id</code> · <code>task_id</code>로 통일해, 수집 경로가 달라도 패널에서 바로 해당 구간 Loki 로그로 이동할 수 있게 했습니다.</p></div>
+        <h4>수집 경로 판단</h4>
+        <ul>
+          <li>홈서버는 다른 tailnet이라 push만 가능</li>
+          <li>Airflow EC2는 태스크 로그를 파일로 읽어야 해서 로컬 에이전트(Grafana Alloy)로 push</li>
+          <li>웹과 vLLM은 자체 /metrics를 노출하므로 기존 pull 유지</li>
+        </ul>
+        <div class="callout"><p>경로는 달라도 라벨을 <code>job</code> · <code>host</code> · <code>dag_id</code> · <code>task_id</code>로 통일 → 패널에서 바로 해당 구간 Loki 로그로 이동</p></div>
+        <h4>그 밖에 바꾼 것</h4>
+        <ul>
+          <li>ARM(t4g) 한 대로 마이그레이션</li>
+          <li>끝난 실행만 보이던 StatsD를 보완하려 REST API exporter 추가</li>
+          <li>팀원 범위: 웹, vLLM의 pull 경로와 Neo4j 플러그인은 팀원 구성을 유지</li>
+        </ul>
       </div>
 
       <div class="topic" id="mon-airflow">
         <h3>Airflow 대시보드</h3>
-        <p class="one-liner">"파이프라인이 도는가"와 "결과가 맞는가"는 서로 다른 실패 모드 → Airflow 대시보드와 데이터 정합성 대시보드를 분리했습니다.</p>
+        <p class="one-liner">끝난 실행의 통계만으로는 멈춘 파이프라인이 보이지 않는다 → 실행 중 상태와 직전 결과, 신선도를 따로 수집해 보이게 했습니다.</p>
         <h4>문제</h4>
-        <ul>
-          <li>StatsD 지표는 끝난 실행의 통계라서 현재 어떤 DAG·태스크가 얼마나 돌고 있는지, 직전 실행이 어떻게 끝났는지 알 수 없었음</li>
+        <ol>
+          <li>StatsD 지표는 끝난 실행의 통계라서 현재 어떤 DAG와 태스크가 얼마나 돌고 있는지, 직전 실행이 어떻게 끝났는지 알 수 없었음</li>
           <li>메트릭이 비었을 때 "실행이 0건"인지 "수집이 끊긴 것"인지 구분할 수 없었음</li>
           <li>DAG 선택 변수가 완료 이력 기반이라, 한 번도 안 돈 수동 백필 DAG는 목록에 없음</li>
-        </ul>
+        </ol>
         <h4>처리</h4>
-        <p>REST exporter로 6개 패널 추가. 기존 StatsD 패널은 지우지 않고 "전체 부하·추세" 역할로 남겼습니다.</p>
-        <h4>지표 선정 근거</h4>
-        <ul>
-          <li><strong>상태 수집 성공 여부:</strong> 관측 실패와 실행 0건을 구분하는 기준</li>
-          <li><strong>활성 DAG/태스크 수 + 현재 대기/실행 경과:</strong> 어떤 작업이 얼마나 기다리고 돌았는지</li>
-          <li><strong>DAG별 직전 완료 결과 + 신선도:</strong> 성공 여부만으로는 멈춘 파이프라인이 드러나지 않음. 완료 후 경과 시간으로 멈춤을 드러냄</li>
-          <li><strong>등록된 DAG 지표를 변수에 추가:</strong> 완료 이력이 없는 백필 DAG도 선택 가능</li>
+        <p>Airflow REST API를 조회하는 exporter로 패널 6개를 추가했습니다. 기존 StatsD 패널은 지우지 않고 "전체 부하와 추세" 역할로 남겼습니다.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>추가한 패널</th><th>보이게 한 것</th></tr></thead>
+            <tbody>
+              <tr><td>상태 수집 성공 여부 (②)</td><td><strong>관측 실패와 실행 0건의 구분.</strong> 메트릭이 비어도 원인이 둘 중 무엇인지 알 수 있어야 함</td></tr>
+              <tr><td>활성 DAG/태스크 수, 현재 대기/실행 경과 (①)</td><td><strong>어떤 작업이 얼마나 기다리고 돌았는지.</strong> 끝난 실행의 통계로는 지금 상태가 보이지 않음</td></tr>
+              <tr><td>DAG별 직전 완료 결과와 신선도 (①)</td><td><strong>멈춘 파이프라인.</strong> 성공 여부만으로는 멈춤이 드러나지 않아, 완료 후 경과 시간으로 드러냄</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="figure-row">
+          <figure class="figure"><a href="../assets/img/kg-rag/panel-collect.webp" target="_blank" rel="noopener"><img src="../assets/img/kg-rag/panel-collect.webp" width="201" height="216" alt="상태 수집 패널: home-server와 airflow-ec2 모두 수집 정상" loading="lazy" decoding="async"></a><figcaption>상태 수집 성공 여부</figcaption></figure>
+          <figure class="figure"><a href="../assets/img/kg-rag/panel-active.webp" target="_blank" rel="noopener"><img src="../assets/img/kg-rag/panel-active.webp" width="495" height="216" alt="호스트별 활성 DAG 실행 수와 활성 태스크 수 패널" loading="lazy" decoding="async"></a><figcaption>활성 DAG/태스크 수</figcaption></figure>
+        </div>
+        <figure class="figure"><a href="../assets/img/kg-rag/panel-freshness.webp" target="_blank" rel="noopener"><img src="../assets/img/kg-rag/panel-freshness.webp" width="810" height="216" alt="DAG별 직전 완료 결과와 완료 후 경과 시간 표: oliveyoung_pipeline 실패 6시간 등" loading="lazy" decoding="async"></a><figcaption>DAG별 직전 완료 결과와 신선도</figcaption></figure>
+        <ul style="margin-top:14px">
+          <li><strong>선택 변수 (③):</strong> 등록된 DAG를 선택 변수에 포함해 완료 이력이 없는 백필 DAG도 목록에 나오게 함</li>
+          <li><strong>시각화 판단:</strong> 변수 캐스케이드 <code>$host</code> → <code>$dag_id</code>. 홈서버와 EC2가 서로 다른 DAG를 실행하므로 host를 먼저 골라야 무관한 DAG가 섞이지 않는다</li>
         </ul>
-        <h4>변수 캐스케이드</h4>
-        <p><code>$host</code> → <code>$dag_id</code> 종속. 홈서버와 EC2가 서로 다른 DAG를 실행하므로 host를 먼저 골라야 무관한 DAG가 섞이지 않습니다.</p>
-<figure class="figure tall"><a href="../assets/img/kg-rag/airflow-dashboard.webp" target="_blank" rel="noopener"><img src="../assets/img/kg-rag/airflow-dashboard.webp" width="1800" height="3052" alt="Airflow 모니터링 Grafana 대시보드: 실행·대기 태스크, 호스트별 DAG 상태와 신선도, 스케줄러 건강, 시스템 리소스, Loki 로그" loading="lazy" decoding="async"></a><figcaption>Airflow 대시보드 · 클릭하면 전체 크기로 열립니다</figcaption></figure>
+<figure class="figure tall"><a href="../assets/img/kg-rag/airflow-dashboard.webp" target="_blank" rel="noopener"><img src="../assets/img/kg-rag/airflow-dashboard.webp" width="1800" height="3052" alt="Airflow 모니터링 Grafana 대시보드: 실행·대기 태스크, 호스트별 DAG 상태와 신선도, 스케줄러 건강, 시스템 리소스, Loki 로그" loading="lazy" decoding="async"></a><figcaption>Airflow 대시보드 전체 · 클릭하면 전체 크기로 열립니다</figcaption></figure>
       </div>
 
       <div class="topic" id="mon-dq">
         <h3>데이터 정합성 대시보드</h3>
-        <p class="one-liner">결과가 맞는지, 얼마나 맞는지, 무엇이 틀렸는지에 답하는 대시보드 (7월 11패널 → 10월 27패널). 점수판(요약) → 게이트(입력 판정) → 추이(경향) → 원시 행(드릴다운) 순으로 좁혀 들어가는 구조입니다.</p>
-        <h4>문제</h4>
+        <p class="one-liner">결과가 맞는지, 얼마나 맞는지, 뭐가 틀렸는지를 점수판 → 게이트 → 추이 → 원시 행 순으로 좁혀 보는 대시보드입니다 (7월 11패널 → 10월 27패널).</p>
+        <h4>지표 선정 근거 (위에서부터 화면 순서)</h4>
+        <ol>
+          <li><strong>최신 DQ 기록 4종</strong> (매핑률, 오류 비중, 카테고리 실패, 카테고리 0건): 알람이 울렸을 때 "왜"를 보는 첫 화면. 단계별 최신 값을 먼저 보고 좁혀 들어가는 구조의 시작점</li>
+          <li><strong>게이트 판정, 연속 누락, 부분 수집 입력:</strong> 전처리를 진행할지, 경고할지, 멈출지 판단. 연속 누락 수가 곧 데이터 나이 9일 SLO 위반 수</li>
+          <li><strong>크롤 수집률</strong> (수집 수 / 기대 URL 수): 카테고리는 "완료"인데 상품이 일부 빠지는 경우를 숫자로 드러냄</li>
+          <li><strong>매핑률과 unmatched 건수:</strong> 보강이 필요한 규모. unique 성분 대비 매칭 성공/실패 건수를 함께 표시</li>
+          <li><strong>입력/정제/오류 레코드 (계산값):</strong> 단계별 건수 규모. 정상+오류=입력이 성립하지 않아 보존식이 아닌 참고용 계산값으로 표기</li>
+        </ol>
+        <h4>지표를 믿고 읽을 수 있게 한 설계</h4>
         <ul>
-          <li>오류율(41%)이 상품 실패율로 읽힐 수 있었음. 실제로는 정상 적재된 상품의 잔여 경고까지 섞인 값</li>
-          <li>과거 날짜를 최근에 처리하는 백필이 "최신 정상 실행"으로 오독될 위험</li>
+          <li><strong>오류율 → "오류 레코드 비중(참고)":</strong> 41%가 상품 실패율로 읽히지 않도록 패널 이름과 설명을 실제 의미에 맞게 바꿈</li>
+          <li><strong>정상/백필 stage 분리, 추이 x축을 batch_date로 두고 백필은 점선:</strong> 오늘 돌린 8월 백필이 "최신 정상 실행"으로 읽히지 않고 8월 위치에 찍힘</li>
+          <li><strong>집계 완전성 판정:</strong> 유형별 합계와 전체 오류 수가 다르면 "집계 불완전"으로 표시. 운영 백필 7건 모두 일치 확인</li>
+          <li><strong>입력 품질 게이트 행:</strong> 판정과 사유 수치 옆에 게이트 로그(Loki)를 붙여 "몇 개"와 "어느 카테고리"를 한 화면에</li>
         </ul>
-        <h4>처리</h4>
-        <ul>
-          <li><strong>정상/백필 stage 분리:</strong> 추이는 한 차트에서 비교하고, 실행 단위 상세는 행을 분리. 서로 다른 실행이 하나의 집계처럼 보이지 않게 함</li>
-          <li><strong>최신 실행의 오류 유형별 건수:</strong> 동적 처리라 새 유형이 생겨도 대시보드 수정 불필요. 최신 실행은 created_at 기준 (백필 대응)</li>
-          <li><strong>집계 완전성 판정:</strong> 유형별 합계 ≠ 전체 오류 수면 '집계 불완전'으로 표시해 부분 기록을 정상 막대로 보여주지 않음. 운영 백필 7건 모두 일치 확인</li>
-          <li><strong>오류율 → "오류 레코드 비중(참고)":</strong> 패널 이름과 설명을 지표의 실제 의미에 맞게 변경</li>
-          <li><strong>추이 x축을 batch_date로, 백필은 점선:</strong> 오늘 돌린 8월 백필이 8월 위치에 찍힘</li>
-          <li><strong>입력 품질 게이트 행:</strong> 판정과 사유 수치 옆에 게이트 로그(Loki)를 붙여 '몇 개'와 '어느 카테고리'를 한 화면에</li>
-        </ul>
-        <h4>지표 선정 근거</h4>
-        <ul>
-          <li><strong>정합성 점수판 4종</strong>(매핑률 · 오류율 · 카테고리 실패 · 빈 카테고리): 알람이 울렸을 때 "왜"를 보는 첫 화면</li>
-          <li><strong>게이트 판정 + 연속 누락 + 부분 수집 입력:</strong> 전처리를 그대로 진행할지, 경고할지, 멈출지를 한눈에. 연속 누락 수 = 데이터 나이 9일 SLO 위반 수</li>
-          <li><strong>크롤 수집률</strong>(수집 수 / 기대 URL 수): 카테고리는 '완료'인데 상품이 일부 빠지는 상품 단위 누락을 숫자로 드러냄</li>
-          <li><strong>매핑률 + unmatched 절대 건수:</strong> 보강이 필요한 규모를 절대량으로 파악</li>
-          <li><strong>Bronze → Silver 행 흐름</strong>(loaded / ok / error): 절대 건수를 나란히 두어 원인 계열 확인</li>
-        </ul>
-<figure class="figure tall"><a href="../assets/img/kg-rag/dq-dashboard.webp" target="_blank" rel="noopener"><img src="../assets/img/kg-rag/dq-dashboard.webp" width="1800" height="3721" alt="데이터 정합성 Grafana 대시보드: 정합성 점수판, 입력 품질 게이트, 매핑 품질 추이, 오류 유형별 건수, 수집 안정성, 원시 행 드릴다운" loading="lazy" decoding="async"></a><figcaption>데이터 정합성 대시보드 · 클릭하면 전체 크기로 열립니다</figcaption></figure>
-      </div>
+<figure class="figure tall"><a href="../assets/img/kg-rag/dq-dashboard.webp" target="_blank" rel="noopener"><img src="../assets/img/kg-rag/dq-dashboard.webp" width="1800" height="3721" alt="데이터 정합성 Grafana 대시보드: 최신 DQ 기록, 입력 품질 게이트, 매핑 품질 추이, 오류 유형별 건수, 수집 안정성, 원시 행 드릴다운" loading="lazy" decoding="async"></a><figcaption>데이터 정합성 대시보드 전체 · 클릭하면 전체 크기로 열립니다</figcaption></figure>
 
-      <div class="topic" id="mon-trial">
-        <h3>시행착오: 로그 파싱에서 API 서빙으로</h3>
-        <p class="one-liner">무엇이 언제 잘못됐는지는 알아도, 어떻게 잘못됐는지는 보이지 않았습니다.</p>
-
-        <h4>1세대: Loki 기반 로그 파싱</h4>
-        <p>파이프라인이 완료 시 로그에 DQ 마커와 JSON을 찍고, Grafana가 LogQL <code>regexp</code> + <code>unwrap</code>으로 숫자를 파싱해 패널을 그렸습니다.</p>
-        <pre style="margin-top:10px"><code>last_over_time({job="airflow", task_id="crawl"} |= `"DQ"`
+        <h4>구조 변경: 로그 파싱에서 테이블로 (1세대 → 2세대)</h4>
+        <p>처음엔 파이프라인 로그의 DQ 값을 LogQL로 파싱했지만, 크롤 호스트가 바뀌면 host 라벨이 갈려 같은 지표가 두 줄로 쪼개지고 배치의 정확한 값까지 내려갈 수 없었습니다. → 품질 지표를 Iceberg 테이블(<code>dq_metrics</code>)로 적재하고 FastAPI + DuckDB로 서빙해, run당 한 행으로 식별하고 원시 행까지 드릴다운합니다.</p>
+        <pre style="margin-top:10px"><code># 1세대: 로그 파싱 (host가 바뀌면 시계열이 둘로 갈림)
+last_over_time({job="airflow", task_id="crawl"} |= `"DQ"`
   | regexp `...` | label_format filename=""
-  | unwrap products_total [29d])</code></pre>
-        <ul style="margin-top:10px">
-          <li><strong>로그 파싱이라 취약하다.</strong> <code>last_over_time</code>은 로그 스트림의 라벨 조합마다 별도 시계열을 만드는데, 이 쿼리는 filename만 뭉갠다. 크롤링을 실행한 호스트가 달라지면 host 라벨이 갈리며 같은 지표가 두 줄로 쪼개진다.</li>
-          <li><strong>원시 데이터 드릴다운이 불가능하다.</strong> 이상을 발견해도 그 배치의 정확한 값까지 내려갈 수 없다.</li>
-        </ul>
+  | unwrap products_total [29d])
 
-        <h4>2세대: Iceberg 테이블 + API 서빙</h4>
-        <p>품질 지표를 Iceberg 테이블 <code>dq_metrics</code>로 정식 적재 → FastAPI + DuckDB로 서빙 → Grafana Infinity로 질의.</p>
-        <pre style="margin-top:10px"><code>GET /dq/latest?stage=crawl&amp;metric=products_total
-
-{ "metric_value": 4115.0, "batch_date": "2026-09-07", "run_id": "20260904",
-  "target_table": null, "created_at": "2026-09-08T15:05:11.533758+00:00" }</code></pre>
-        <ul style="margin-top:10px">
-          <li>지표가 로그 스트림의 라벨이 아니라 데이터의 키(<code>batch_date</code> · <code>run_id</code>)로 식별 → run당 정확히 한 행</li>
-          <li>원시 행(최근 200개) 드릴다운 테이블 패널 신설 → 요약에서 이상을 발견한 뒤 그 배치의 정확한 값까지 확인 가능</li>
-        </ul>
+# 2세대: 테이블 + API (batch_date, run_id로 한 행)
+GET /dq/latest?stage=crawl&amp;metric=products_total</code></pre>
       </div>
 
       <div class="topic" id="mon-alert">
-        <h3>Discord 알림 및 리포트 체계</h3>
-        <p class="one-liner">대시보드를 계속 보고 있을 수는 없으므로, 메트릭 기반 Discord 알림으로 이상 상황을 즉시 통보받고 파이프라인 완료 리포트도 받도록 구성했습니다.</p>
-        <h4>감시 항목 (총 14종, 알림 룰은 머지하면 운영에 자동 반영)</h4>
-        <ul>
-          <li><strong>데이터:</strong> 크롤 신선도, 전처리 지연, 매칭률 급락, 오류율 상승, 크롤 품질 경고, 전처리 보류</li>
-          <li><strong>파이프라인:</strong> DAG 실패, 스케줄러 다운, 크롤 장기 실행, 관측 수집 실패</li>
-          <li><strong>인프라:</strong> 서버 디스크 85% / 93%, 서버 메모리 90%, Airflow 노드 끊김</li>
-        </ul>
-        <h4>임계치 근거</h4>
+        <h3>Discord 알림과 파이프라인 리포트</h3>
+        <p class="one-liner">대시보드를 계속 볼 수는 없다 → 이상은 알림으로, 결과는 리포트로 받고, 임계치는 평상시 실측값에서 정했습니다.</p>
+        <h4>알림 규칙 20개: 파이프라인과 인프라 14종 + 베타 웹 6종</h4>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>알람</th><th>임계</th><th>평상시 실측</th><th>마진을 이렇게 잡은 이유</th></tr></thead>
             <tbody>
-              <tr><td>매칭률 급락</td><td>&lt; 0.95</td><td>≈ 0.991</td><td>정상 변동으로는 울리지 않고 진짜 급락만</td></tr>
-              <tr><td>전처리 오류율</td><td>&gt; 0.7</td><td>~0.41</td><td>error_rate에는 의도된 제외(옵션 상품·중복)가 원래 섞임 → 정상치의 약 2배</td></tr>
-              <tr><td>크롤 품질 경고</td><td>경고 판정</td><td>누락, 연속 누락</td><td>고정 수집량 대신 카테고리 단위 판정 (<a href="#ops-order">아래</a>)</td></tr>
-              <tr><td>전처리 보류</td><td>보류 판정</td><td>대체할 run 없음</td><td>쓸 데이터가 아예 없을 때만 멈춤 (<a href="#ops-select">아래</a>)</td></tr>
-              <tr><td>크롤 신선도</td><td>120h</td><td>최대 간격 95h</td><td>96h는 정상 간격과 붙어 있어 하루 여유 추가</td></tr>
+              <tr><td>데이터</td><td>크롤 신선도, 전처리 지연, 매칭률 급락, 오류율 상승, 크롤 품질 경고, 전처리 보류</td></tr>
+              <tr><td>파이프라인</td><td>DAG 실패, 스케줄러 다운, 크롤 장기 실행, 관측 수집 실패</td></tr>
+              <tr><td>인프라</td><td>서버 디스크 85% / 93%, 서버 메모리 90%, 노드 끊김 (Airflow EC2, 홈서버, 베타 앱)</td></tr>
             </tbody>
           </table>
         </div>
-        <h4>파이프라인 완료 리포트</h4>
+        <p style="margin-top:6px;font-size:0.9rem">베타 웹 6종은 <a href="#beta">베타 서비스 관측</a>에서 다룹니다.</p>
+        <h4>임계치 근거</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>알림</th><th>임계</th><th>평상시 실측</th><th>이유</th></tr></thead>
+            <tbody>
+              <tr><td>크롤 신선도</td><td>&gt; 120h</td><td>완료 간격 최대 95h</td><td>정상 최대 간격 약 96h에 하루(24h) 여유. 기존 96h는 너무 빠듯했음</td></tr>
+              <tr><td>크롤 장기 실행</td><td>&gt; 60h</td><td>정상 최대 약 48h</td><td>멈춤을 신선도(120h)보다 하루 반 먼저 감지</td></tr>
+              <tr><td>매칭률 급락</td><td>&lt; 0.95</td><td>약 0.991 (0.990~0.992)</td><td>평상시 변동이 매우 작아 붕괴 수준의 하락만 잡음</td></tr>
+              <tr><td>전처리 오류율</td><td>&gt; 0.7</td><td>약 0.41 (0.401~0.418)</td><td>평상시 매우 안정적이라 정상선을 크게 넘을 때만 잡음</td></tr>
+              <tr><td>크롤 품질 경고, 전처리 보류</td><td>게이트 판정이 경고, 보류</td><td>–</td><td>판정은 입력 품질 게이트 한 곳에서 하고 알림은 결과만 읽음. 보류는 critical</td></tr>
+              <tr><td>노드 메트릭 끊김</td><td>5분간 부재</td><td>–</td><td>기존 식은 15분 넘게 꺼지면 저절로 해소됨. 호스트를 고정한 <code>absent_over_time</code>으로 수정</td></tr>
+              <tr><td>DAG 실패</td><td>10분 내 실패 1건 이상 (2분 지속)</td><td>–</td><td>실패 1건이면 알림. 2분 지속 조건은 재기동 직후 카운터 리셋으로 생기는 가짜 알림을 거르기 위함</td></tr>
+              <tr><td>스케줄러 다운</td><td>5분간 heartbeat 증가 없음 (5분 지속)</td><td>–</td><td>5분간 heartbeat가 0건이면 다운으로 판단. 지속 시간은 스크랩이 잠깐 빠져도 흔들리지 않게. 시리즈가 사라지는 것 자체가 다운이라 "데이터 없음"도 알림으로 처리</td></tr>
+            </tbody>
+          </table>
+        </div>
+<div class="figure-row"><figure class="figure"><a href="../assets/img/kg-rag/report-preprocess.webp" target="_blank" rel="noopener"><img src="../assets/img/kg-rag/report-preprocess.webp" width="256" height="367" alt="Discord 전처리 정제·성분 매칭 완료 리포트: 정상 3,332건, 매칭률 98.9%" loading="lazy" decoding="async"></a><figcaption>각 단계가 품질 지표를 적재하는 순간 자동 발송되는 완료 리포트 (배치 날짜와 품질 지표 포함)</figcaption></figure><figure class="figure"><a href="../assets/img/kg-rag/alert-disk.webp" target="_blank" rel="noopener"><img src="../assets/img/kg-rag/alert-disk.webp" width="412" height="355" alt="Discord 디스크 부족 알림과 정상화 알림: airflow-ec2 루트 디스크 86.5%에서 76.8%로" loading="lazy" decoding="async"></a><figcaption>임계를 넘으면 오는 Discord 알림</figcaption></figure></div>
+        <h4>문제 해결과 재조정 사례</h4>
         <ul>
-          <li>각 단계가 품질 지표를 적재하는 순간 자동 발송</li>
-          <li>배치 날짜와 데이터 품질 지표를 함께 보내 수행 결과를 한눈에 확인</li>
-        </ul>
-<div class="figure-row"><figure class="figure"><a href="../assets/img/kg-rag/report-crawl.webp" target="_blank" rel="noopener"><img src="../assets/img/kg-rag/report-crawl.webp" width="303" height="315" alt="Discord 크롤링 수집 완료 리포트: 배치 2026-10-10, 수집 4,052건, 수집률 99.2%" loading="lazy" decoding="async"></a><figcaption>크롤링 완료 리포트</figcaption></figure><figure class="figure"><a href="../assets/img/kg-rag/report-preprocess.webp" target="_blank" rel="noopener"><img src="../assets/img/kg-rag/report-preprocess.webp" width="256" height="367" alt="Discord 전처리 정제·성분 매칭 완료 리포트: 정상 3,332건, 매칭률 98.9%" loading="lazy" decoding="async"></a><figcaption>전처리 완료 리포트</figcaption></figure><figure class="figure"><a href="../assets/img/kg-rag/alert-disk.webp" target="_blank" rel="noopener"><img src="../assets/img/kg-rag/alert-disk.webp" width="412" height="355" alt="Discord 디스크 부족 알림과 정상화 알림: airflow-ec2 루트 디스크 86.5%에서 76.8%로" loading="lazy" decoding="async"></a><figcaption>디스크 부족 알림과 정상화</figcaption></figure></div>
-        <h4>문제 해결 사례</h4>
-        <ul>
-          <li><strong>디스크 부족 알림:</strong> 쓰지 않는 Docker 이미지와 설정 파일을 정리해도 임계치 아래로 내려가지 않아 EBS 볼륨을 30GB에서 40GB로 증설</li>
-          <li><strong>노드 끊김 알림이 저절로 해소되던 버그:</strong> 노드가 15분 넘게 꺼져 있으면 알림이 해소 상태로 바뀌던 문제를 <code>absent_over_time</code>으로 고치고 운영 Prometheus에서 확인</li>
+          <li>디스크 부족 알림 → 이미지 정리로도 부족해 EBS를 40GB로 증설</li>
+          <li>수집 상품 수가 고정값(1500) 미만이면 울리던 알림은 9월 정상치(3,061~5,126)와 안 맞아 삭제하고, 게이트 판정으로 대체</li>
+          <li>알림 룰은 머지하면 운영에 자동 반영</li>
         </ul>
       </div>
     </section>
@@ -373,14 +336,14 @@
     <section class="part" id="ops">
       <p class="part-label">04 · 종료 후 운영 개선 (2026.09 – 10)</p>
       <h2>크롤 DQ 오탐에서 입력 품질 게이트까지</h2>
-      <p class="part-lead">정규 활동이 끝난 뒤에도 파이프라인을 운영하며 발견한 문제를 원인부터 다시 짚고, 측정·판정·알림·복구·재실행 경로를 고쳤습니다.</p>
+      <p class="part-lead">종료 후 SRE 스터디를 계기로 관측과 알림을 다시 점검했습니다. 정규 활동이 끝난 뒤에도 파이프라인을 운영하며 발견한 문제를 원인부터 다시 짚고, 측정·판정·알림·복구·재실행 경로를 고쳤습니다.</p>
 
       <div class="topic" id="ops-cause">
         <h3>크롤 DQ 오탐 알림: 원인 좁히기</h3>
         <p class="one-liner">이미 끝난 크롤의 알림이 4시간마다 반복 → 측정, 기록, 알림 전달, 하류 네 층위로 나눠 원인을 확인했습니다.</p>
         <h4>증상 (2026.09)</h4>
         <div class="symptom">
-          <figure class="figure"><a href="../assets/img/kg-rag/alert-repeated.webp" target="_blank" rel="noopener"><img src="../assets/img/kg-rag/alert-repeated.webp" width="484" height="645" alt="Discord 오탐 알림이 9월 30일 06:02와 10:07에 같은 내용(빈 카테고리 14개, 수집량 급감 1,388건)으로 두 번 발송된 화면" loading="lazy" decoding="async"></a><figcaption>같은 알림이 06:02, 10:07에 반복 (9/30)</figcaption></figure>
+          <figure class="figure"><a href="../assets/img/kg-rag/alert-repeated-1001.webp" target="_blank" rel="noopener"><img src="../assets/img/kg-rag/alert-repeated-1001.webp" width="844" height="643" alt="Discord 오탐 알림이 10월 1일 오전 2:27과 6:32에 같은 내용(빈 카테고리 14개, 수집량 급감 1388건)으로 반복 발송된 화면" loading="lazy" decoding="async"></a><figcaption>4시간마다 반복된 오탐 알림</figcaption></figure>
           <div class="symptom-metrics">
             <div class="metric"><div class="value">1,388 vs 4,781</div><div class="label">DQ가 기록한 수집량 vs 실제 S3 적재량 (9/25, 재시도로 재개된 실행)</div></div>
             <div class="metric"><div class="value">4h 5m 간격</div><div class="label">끝난 크롤의 '빈 카테고리 14개', '수집량 급감' 알림이 다음 크롤까지 반복</div></div>
@@ -407,7 +370,7 @@
       </div>
 
       <div class="topic" id="ops-order">
-        <h3>고치는 순서 정하기: 측정 → 게이트 → 알림</h3>
+        <h3>DQ 해결 (1): 측정 → 게이트 → 알림 순서로 고치기</h3>
         <p class="one-liner">측정이 틀린 채로 판정을 만들면 정상 배치는 막고 손실 배치는 통과시킵니다.</p>
         <ol class="steps">
           <li><strong>측정 바로잡기 <small>· 크롤러 기록, 집계</small></strong>
@@ -416,6 +379,7 @@
               <li>카테고리 '완료'는 끝까지 수집했을 때만 기록</li>
               <li>모든 예외를 실패로 기록하고 사유 보존</li>
               <li>같은 날짜 중복 실행 차단 (<code>max_active_runs=1</code>, manifest 소유 dagRun 확인)</li>
+              <li>수집 로직은 팀원 담당이라 그대로 두고 기록과 집계만 수정</li>
             </ul>
           </li>
           <li><strong>입력 품질 게이트 <small>· 전처리 맨 앞</small></strong>
@@ -446,11 +410,11 @@
           </table>
         </div>
         <div class="callout"><p><strong>배포 후 확인 (10/7):</strong> 같은 날짜 차단 동작, 리포트에 시도 횟수 표시, '스킨케어/크림 3회 연속 누락' 경고 1번만 발송, 전처리 지연 오탐 없음</p></div>
-<figure class="figure"><a href="../assets/img/kg-rag/alert-crawl-quality.webp" target="_blank" rel="noopener"><img src="../assets/img/kg-rag/alert-crawl-quality.webp" width="769" height="199" alt="Discord 크롤 품질 경고: 배치 2026-10-10, 입력 품질 게이트 경고" loading="lazy" decoding="async"></a><figcaption>배치당 1번 오는 크롤 품질 경고 (10/10 배치)</figcaption></figure>
+<figure class="figure"><a href="../assets/img/kg-rag/alert-crawl-quality-1007.webp" target="_blank" rel="noopener"><img src="../assets/img/kg-rag/alert-crawl-quality-1007.webp" width="444" height="183" alt="Discord 입력 품질 게이트 경고: 배치 2026-10-07, 판정 경고, 누락 9건, 연속 누락 스킨케어/크림 3회 연속" loading="lazy" decoding="async"></a><figcaption>배치당 1번 오는 크롤 품질 경고 (10/7 배치)</figcaption></figure>
       </div>
 
       <div class="topic" id="ops-select">
-        <h3>입력 선택 규칙: 카테고리 단위로 믿을 데이터 고르기</h3>
+        <h3>DQ 해결 (2): 카테고리 단위로 믿을 데이터 고르기</h3>
         <p class="one-liner">크롤러는 배포 일정상 고칠 수 없었다 → 데이터를 받아 쓰는 쪽에서 카테고리 단위로 고릅니다.</p>
         <h4>문제</h4>
         <p>게이트의 '보류'는 입력 전체를 멈춥니다. 반쪽 카테고리 1개 때문에 나머지 18개 갱신도 멈추고, 그 카테고리가 다음 크롤에서 통째로 빠지면 같은 반쪽 데이터가 계속 골라져 보류가 끝나지 않습니다. 백필은 입력을 고르는 방식이 달라 백필한 날짜만 카테고리가 빠졌습니다.</p>
@@ -526,6 +490,7 @@
       <div class="topic" id="ops-idempotent">
         <h3>재실행 멱등화: 백필 패턴을 정상 파이프라인으로</h3>
         <p class="one-liner">실패한 태스크를 다시 돌려도 결과가 같도록 설계하고, 운영 재실행 2회와 다음 정상 배치로 확인했습니다.</p>
+        <p style="margin-top:8px">위 백필(과거 누락 배치를 정상 경로와 분리해 재처리하는 수동 복구 경로: dry-run과 apply 분리, 조건부 교체)의 패턴을 정상 파이프라인으로 넓혔습니다.</p>
         <h4>문제</h4>
         <p>실패한 태스크를 Clear 후 재실행하면 silver_history, dq_metrics, gold 테이블이 append라 같은 배치가 두 벌 쌓입니다. 운영 DQ를 조회해 보니 같은 batch_date로 2회 이상 돈 정상 실행이 전처리 DAG의 두 단계(bronze_to_silver, silver_to_gold)에서 각각 4개 날짜씩 있었습니다.</p>
         <h4>설계</h4>
@@ -562,6 +527,61 @@
           </table>
         </div>
         <div class="callout"><p><strong>교훈:</strong> mock으로 가린 단위 테스트는 데이터 계약을 검증하지 못한다. 배포 직후 운영 기준값부터 재고, 실제 행에 찍히는 값으로 확인한다.</p></div>
+      </div>
+    </section>
+
+    <!-- 5. 베타 관측 -->
+    <section class="part" id="beta">
+      <p class="part-label">05 · 베타 운영 (2026.11)</p>
+      <h2>베타 서비스 관측: 트래픽이 거의 없는 서비스의 알림 설계</h2>
+      <p class="part-lead">저트래픽이라 에러율 대신 상시 확인과 사건 수로 설계해, GPU 정지 3회를 모두 3분 만에 감지했습니다.</p>
+      <p style="margin-top:6px;font-size:0.9rem;color:var(--text-muted)">역할: 앱 개발, 배포, GPU 서버 운영은 팀원 담당. 관측 연결, 알림 설계, 대시보드 보완을 맡음</p>
+
+      <div class="topic">
+        <h3>문제</h3>
+        <ul style="margin-top:8px">
+          <li>하루 수십 건 트래픽이라 에러율 같은 비율 알림은 의미가 없음</li>
+          <li>스트리밍(SSE) 추천은 실패해도 HTTP 200에 <code>event: error</code>로 응답 → 5xx 알림으로는 못 잡는다. 설계 리뷰 중 앱 코드에서 확인하고, 앱이 내보내던 추천 결과 메트릭으로 "추천 실패" 알림을 추가</li>
+          <li>GPU가 꺼지면 앱이 템플릿 응답으로 넘어가 요청은 "성공"으로 기록 → 상시 확인(<code>/ready</code>)만 이 상황을 잡았다</li>
+        </ul>
+
+        <h4>설계 원칙</h4>
+        <ul>
+          <li><strong>상시 확인:</strong> 요청이 없어도 장애를 잡도록 내부 <code>/ready</code>와 외부 HTTPS를 1분마다 호출</li>
+          <li><strong>사건 수:</strong> 실제 요청은 비율 대신 "1건이라도 생기면" 알림</li>
+          <li><strong>for 시간:</strong> 배포 재시작 같은 짧은 끊김은 흡수</li>
+        </ul>
+
+        <h4>알림 6종 (위 3개 critical, 아래 3개 warning)</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>알림</th><th>기준</th><th>원칙</th></tr></thead>
+            <tbody>
+              <tr><td>웹 서비스 준비 실패</td><td>/ready 실패 3분 (DB, Redis, Neo4j, GPU 중 하나)</td><td>상시 확인</td></tr>
+              <tr><td>웹 외부 접속 실패</td><td>공개 도메인 HTTPS 실패 3분</td><td>상시 확인</td></tr>
+              <tr><td>웹 앱 다운</td><td>앱 메트릭 수집 실패 2분</td><td>for 시간</td></tr>
+              <tr><td>웹 5xx</td><td>10분 내 1건 이상</td><td>사건 수</td></tr>
+              <tr><td>추천 실패</td><td>10분 내 1건 이상</td><td>사건 수</td></tr>
+              <tr><td>인증서 만료 임박</td><td>14일 미만</td><td>만료 기한</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>관측 구조: 앱 밖으로 분리</h4>
+        <p>처음에는 앱 compose에 수집기(Alloy)를 넣었지만, 운영은 ECR 이미지와 릴리스별 compose 묶음으로 배포되고 있어 설정이 반영될 경로가 없었습니다. 관측을 별도 에이전트 스택으로 분리해 앱의 Docker 네트워크에서 <code>/metrics</code>와 컨테이너 로그를 읽고 Tailscale로 push → 팀원의 앱 레포는 건드리지 않고, 보안그룹에 새 포트도 열지 않았습니다.</p>
+
+        <h4>결과</h4>
+        <div class="metrics">
+          <div class="metric"><div class="value">3 / 3</div><div class="label">GPU 정지 3회 모두 3분 만에 감지</div></div>
+          <div class="metric"><div class="value">0건</div><div class="label">배포 오탐 (5일간 릴리스 24회, 재시작과 순간 실패 8건은 대기 단계에서 자동 해소)</div></div>
+          <div class="metric"><div class="value">563건 / 63명</div><div class="label">베타 요청 수와 사용자 수 (11/8 공개 배포)</div></div>
+        </div>
+        <figure class="figure"><a href="../assets/img/kg-rag/beta-alert-discord.webp" target="_blank" rel="noopener"><img src="../assets/img/kg-rag/beta-alert-discord.webp" width="570" height="199" alt="Discord 알림: beta-app /ready가 3분 넘게 실패, DB·Redis·Neo4j·GPU 중 연결 장애, 앱 로그에서 원인 확인, 대시보드 링크" loading="lazy" decoding="async"></a><figcaption>11/12 GPU 정지 시 Discord 알림 (어디서, 무엇이, 다음에 볼 곳)</figcaption></figure>
+        <figure class="figure"><a href="../assets/img/kg-rag/beta-alert-history.webp" target="_blank" rel="noopener"><img src="../assets/img/kg-rag/beta-alert-history.webp" width="1800" height="266" alt="Grafana 알림 이력: 11/12 00:36 Pending, 00:39 Alerting, 11/10 22:42 Pending 후 22:43 Normal" loading="lazy" decoding="async"></a><figcaption>알림 이력: 11/12 00:36 Pending → 00:39 Alerting. 11/10의 1분짜리 실패는 알림 없이 Normal로 복귀</figcaption></figure>
+        <div class="callout">
+          <p><strong>운영 전 (11/4):</strong> 팀의 보안그룹 정리로 모니터링 경로가 끊긴 것을 알림이 6분 만에 감지</p>
+          <p><strong>한계:</strong> 의도된 정지와 장애를 구분하지 못해 GPU를 끌 때마다 수동으로 silence를 걸었다 → 유지보수 모드 신호가 필요</p>
+        </div>
       </div>
     </section>
 

@@ -70,19 +70,23 @@
       <div class="strengths">
         <div class="strength">
           <h3>조건에 맞춰 판단합니다</h3>
-          <p>도구가 제안하는 기본값을 그대로 받지 않고, 서비스의 비용·보안·운영 조건을 넣어 다시 판단합니다.</p>
+          <p>권장 구조나 도구의 기본값을 그대로 받지 않고, 서비스의 비용, 보안, 운영 조건을 넣어 다시 판단합니다.</p>
+          <p class="applied"><b>적용한 곳</b>BOAZ 웹: <a href="projects/boaz-web.html#infra-1">부하 테스트로 상시 로드밸런서를 빼고</a>, <a href="projects/boaz-web.html#infra-2">모집 기간에만 이중화</a></p>
         </div>
         <div class="strength">
           <h3>원인을 좁혀 들어갑니다</h3>
-          <p>증상보다 단서를 봅니다. 재현·로그·계층을 하나씩 지워가며 범위를 줄입니다.</p>
+          <p>증상보다 단서를 봅니다. 재현, 로그, 계층을 하나씩 지워가며 범위를 줄입니다.</p>
+          <p class="applied"><b>적용한 곳</b><a href="projects/boaz-web.html#troubleshooting">로그인 장애 재분석</a>, <a href="projects/kg-rag.html#ops-cause">크롤 DQ 오탐을 측정, 기록, 알림, 하류로 나눠 추적</a></p>
         </div>
         <div class="strength">
           <h3>반복되는 운영을 남깁니다</h3>
-          <p>같은 문제가 다시 생겨도 누구나 같은 방식으로 대응할 수 있도록 절차와 설정을 코드와 문서로 남깁니다.</p>
+          <p>같은 문제가 다시 생겨도 누구나 같은 방식으로 대응할 수 있게 절차와 설정을 코드와 문서로 남깁니다.</p>
+          <p class="applied"><b>적용한 곳</b><a href="projects/boaz-web.html#infra-2">시즌 전환 스크립트</a>, <a href="projects/boaz-web.html#backend-docs">명세 저장소 backend-docs</a>, <a href="projects/kg-rag.html#ops-idempotent">재실행 멱등화</a></p>
         </div>
         <div class="strength">
           <h3>AI와 일하는 규칙을 둡니다</h3>
           <p>구현과 테스트는 AI가 하되, 설계 합의 전 수정 금지와 승인 후 배포 규칙을 둡니다. 결과는 독립 리뷰와 운영 데이터 재조회로 다시 확인합니다.</p>
+          <p class="applied"><b>적용한 곳</b><a href="projects/boaz-web.html#backend-docs">AGENTS.md와 Claude Code 스킬을 저장소에 포함</a>, <a href="projects/kg-rag.html#ops-idempotent">다른 AI에 독립 리뷰</a></p>
         </div>
       </div>
     </section>
@@ -95,15 +99,16 @@
         <article class="project-card">
           <div class="project-head">
             <h3><a href="projects/kg-rag.html">KG-RAG 기반 화장품 추천 시스템</a></h3>
-            <span class="period">2026.01 – 현재</span>
+            <span class="period">2026.01 – 2026.11</span>
           </div>
           <p class="project-meta">BOAZ 25기 데이터 엔지니어링 · Team 4EVR0 (4인) · 데이터 파이프라인 · AWS 인프라 · 통합 모니터링</p>
           <p class="project-desc">피부 고민을 자연어로 입력하면 근거 있는 성분·제품을 추천하는 GraphRAG + LLM 서비스. 데이터 파이프라인부터 서빙·품질 검증까지 End-to-End LLMOps로 구현했습니다.</p>
           <ul>
             <li>Iceberg 메달리온(Bronze/Silver/Gold) 전처리 파이프라인 설계. Aho-Corasick 성분 매칭으로 <strong>사전 완전탐색 대비 약 200배대 속도</strong>, 매칭 정합성 평상 <strong>≈ 99.1%</strong></li>
-            <li>홈서버·EC2·GPU 서버 등 <strong>5개 이기종 실행 환경</strong>의 메트릭·로그를 Grafana로 통합하고, Airflow·데이터 정합성 대시보드와 <strong>Discord 알림 14종</strong> 설계</li>
+            <li>홈서버·EC2·GPU 서버 등 <strong>5개 실행 환경</strong>의 지표와 로그를 Grafana 하나로 통합. Airflow·데이터 정합성 대시보드 2종 전담, 파이프라인과 인프라 <strong>알림 14종</strong> 설계</li>
             <li>GitHub OIDC로 <strong>액세스 키 없는 CI/CD</strong> 구성, 배포 결과 회수와 위험도별 반영(승인 분리) 설계</li>
             <li>종료 후 운영 개선: 크롤 DQ 오탐을 4개 층위로 분석해 <strong>입력 품질 게이트</strong>와 카테고리 단위 입력 선택 규칙 도입, 백필로 누락 배치 7개 복구, 전처리 <strong>재실행 멱등화</strong> (데이터 나이 SLO 달성률 96.1%, 과거 재생 기준)</li>
+            <li>베타 운영(2026.11): 트래픽이 거의 없는 서비스에 맞춰 상시 확인과 사건 수 기준 <strong>알림 6종</strong> 설계, GPU 정지 3회를 <strong>모두 3분 내 감지</strong>, 배포 오탐 0건</li>
           </ul>
           <ul class="tags" aria-label="사용 기술">
             <li>Airflow</li><li>Iceberg</li><li>AWS</li><li>Prometheus</li><li>Grafana</li><li>Loki</li><li>FastAPI</li><li>DuckDB</li><li>GitHub Actions</li>
@@ -125,6 +130,7 @@
             <li>부하 테스트로 마감 피크에도 t3.small 한 대로 충분함을 확인하고, <strong>오리진 직접 접근 차단 + DB 격리</strong>를 지키는 CloudFront + 퍼블릭 EC2 구조로 고정비와 복잡도를 줄임</li>
             <li>고가용성을 모집 기간(연 4주)에만 켜는 <strong>시즌제 인프라</strong> 설계, 상시 이중화 대비 <strong>연 40% 이상 비용 절감</strong>. 시즌 전환은 Bash 스크립트로 자동화</li>
             <li>CloudWatch + SNS 알람 12종 구성. 로그인 장애를 남은 지표로 재분석해 <strong>처음 진단(CloudFront 오류 캐시)을 기각</strong>하고 WAF 요청 수 제한으로 원인 정정</li>
+            <li>명세 저장소 <strong>backend-docs</strong> 구축: 목록 생성과 형식 검사, 코드 변경 알림을 자동화하고 프론트엔드 합의 절차 설계. <strong>기능 명세 68개, TC 864개</strong> 이전</li>
           </ul>
           <ul class="tags" aria-label="사용 기술">
             <li>Spring Boot</li><li>EC2</li><li>RDS</li><li>CloudFront</li><li>ALB</li><li>CodeDeploy</li><li>CloudWatch</li><li>Terraform</li>
@@ -165,13 +171,13 @@
       <section id="skills" aria-labelledby="skills-title">
         <h2 class="section-title" id="skills-title">기술 스택</h2>
         <dl class="kv">
-          <dt>Data</dt><dd>Python, Airflow, Iceberg, PyIceberg, Pandas, DuckDB, MySQL, Redis</dd>
           <dt>Observability</dt><dd>Prometheus, Grafana, Loki, Grafana Alloy, AWS CloudWatch, k6</dd>
-          <dt>AWS</dt><dd>EC2, ECS(Fargate), RDS, S3, CloudFront, ALB, VPC, Route 53, ACM, WAF, IAM, Athena, Glue, SSM</dd>
-          <dt>IaC</dt><dd>Terraform (BOAZ 웹 실서비스 마이그레이션 진행 중, 네트워크·CDN 담당)</dd>
+          <dt>Cloud (AWS)</dt><dd>EC2, ECS(Fargate), RDS, S3, CloudFront, ALB, VPC, Route 53, ACM, WAF, IAM, Athena, Glue, SSM</dd>
+          <dt>IaC</dt><dd>Terraform (BOAZ 웹 실서비스 마이그레이션 진행 중, 네트워크 완료)</dd>
           <dt>CI/CD · 컨테이너</dt><dd>GitHub Actions(OIDC), AWS CodeDeploy, ECR, Docker, Docker Compose</dd>
-          <dt>OS · 스크립트</dt><dd>Linux(Ubuntu), Bash, Git</dd>
+          <dt>Data</dt><dd>Python, Airflow, Iceberg, PyIceberg, DuckDB, Pandas, MySQL, Redis</dd>
           <dt>Backend</dt><dd>Java 21, Spring Boot, Spring Data JPA, Spring Security(JWT · OAuth 2.0), FastAPI</dd>
+          <dt>OS · 도구</dt><dd>Linux(Ubuntu), Bash, Git, Swagger, Postman, draw.io, Notion</dd>
         </dl>
       </section>
       <section aria-labelledby="certs-title">
@@ -232,7 +238,7 @@
 
   <footer class="site-footer">
     <div class="container">
-      <span>© 2026 김서연 · 2026.10 업데이트</span>
+      <span>© 2026 김서연 · 2026.11 업데이트</span>
       <span><a href="https://github.com/seoyeon83" target="_blank" rel="noopener noreferrer">GitHub</a> · <a href="https://www.linkedin.com/in/seoyeon-kim-b7369a305/" target="_blank" rel="noopener noreferrer">LinkedIn</a> · <a href="mailto:seannn283@gmail.com">Email</a></span>
     </div>
   </footer>

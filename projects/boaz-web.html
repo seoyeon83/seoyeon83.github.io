@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>BOAZ 공식 웹사이트 | 김서연</title>
-  <meta name="description" content="BOAZ 공식 웹사이트 백엔드 PM. 비용과 보안을 함께 고려한 AWS 인프라, 시즌제 고가용성, CloudWatch 모니터링, 로그인 장애 재분석.">
+  <meta name="description" content="BOAZ 공식 웹사이트 백엔드 PM. 비용과 보안을 함께 고려한 AWS 인프라, 시즌제 고가용성, CloudWatch 모니터링, 로그인 장애 재분석, 명세 저장소 backend-docs.">
   <meta property="og:type" content="article">
   <meta property="og:title" content="BOAZ 공식 웹사이트 | 김서연">
   <meta property="og:description" content="백엔드 PM · AWS 인프라 설계 및 운영">
@@ -41,8 +41,8 @@
     </p>
 
     <dl class="info-grid">
-      <dt>소속</dt><dd>빅데이터 연합 동아리 BOAZ</dd>
-      <dt>기간</dt><dd>2026.02 – 현재 (실서비스 운영 중)</dd>
+      <dt>소속</dt><dd>빅데이터 연합 동아리 BOAZ 공식 웹사이트, 2026.05 서비스 오픈 후 운영 중</dd>
+      <dt>기간</dt><dd>2026.02 – 2026.07, 웹사이트 개발 TF 백엔드 팀장<br>2026.08 – 현재, 관리자 페이지 개발과 운영, 백엔드 PM</dd>
       <dt>팀 · 역할</dt>
       <dd>
         <ul>
@@ -51,15 +51,7 @@
             웹사이트 백엔드 개발, AWS 인프라 설계·구축, 배포</li>
           <li><strong>하반기 (2026.08 – 현재) · BOAZ 서비스운영팀</strong><br>
             5인 · 백엔드 PM<br>
-            관리자 페이지 개발, 실서비스 운영, Terraform 마이그레이션 중 네트워크·CDN 담당 (진행 중)</li>
-        </ul>
-      </dd>
-      <dt>주요 업무</dt>
-      <dd>
-        <ul>
-          <li>신규 기수 지원 모집 및 평가, 관리자 기능 개발</li>
-          <li>AWS 인프라 설계 및 구축</li>
-          <li>실서비스 운영</li>
+            관리자 페이지 개발, 실서비스 운영, 백엔드 팀 운영, Terraform 마이그레이션 중 네트워크·CDN 담당 (네트워크 완료, CDN 남음)</li>
         </ul>
       </dd>
       <dt>서비스 특성</dt>
@@ -70,7 +62,6 @@
           <li>지원서에 개인정보 포함</li>
         </ul>
       </dd>
-      <dt>성과</dt><dd>제24회 BOAZ 컨퍼런스 오프닝 세션 발표 (2026.07.25)</dd>
     </dl>
 
     <div class="repo-links" aria-label="관련 링크">
@@ -79,12 +70,26 @@
       <a href="https://github.com/BOAZ-website/backend" target="_blank" rel="noopener noreferrer">백엔드 저장소 <span>BOAZ-website/backend ↗</span></a>
     </div>
 
+    <h2 class="overview-heading">규모</h2>
     <div class="metrics">
-      <div class="metric"><div class="value">40%+</div><div class="label">시즌제 운영으로 상시 이중화 대비 연간 비용 절감</div></div>
-      <div class="metric"><div class="value">월 $50 / $113</div><div class="label">평시 / 모집 시즌(고가용성) 인프라 비용</div></div>
-      <div class="metric"><div class="value">t3.small 1대</div><div class="label">부하 테스트로 확인한 마감 피크 처리 용량</div></div>
-      <div class="metric"><div class="value">알람 12종</div><div class="label">CloudWatch + SNS 이메일 알림</div></div>
+      <div class="metric"><div class="value">약 59만 건</div><div class="label">6개월 누적 요청</div><div class="sub">CloudFront 기준 (방문 수 아님)</div></div>
+      <div class="metric"><div class="value">20~30배</div><div class="label">서류 평가 달의 API 요청</div><div class="sub">6월 vs 8~10월 월평균</div></div>
+      <div class="metric"><div class="value">9,208건</div><div class="label">한 시간 최대 API 요청</div><div class="sub">평가 기간 6/29 20시, 서버 1대로 처리</div></div>
+      <div class="metric"><div class="value">8개 도메인</div><div class="label">백엔드 서비스 범위</div><div class="sub">API 67개, JPA 엔티티 16개 (팀 레포 기준)</div></div>
     </div>
+
+    <h2 class="overview-heading">주요 기여</h2>
+    <ul class="contrib">
+      <li><span class="name"><a href="#infra-1">인프라 설계</a></span><span class="desc">부하 테스트로 단일 서버 운영 확인, CloudFront + 퍼블릭 EC2 구조</span><span class="result">월 예상 비용 $70대 → $40대</span></li>
+      <li><span class="name"><a href="#infra-2">시즌제 이중화</a></span><span class="desc">모집 기간에만 ALB, EC2 2대, RDS Multi-AZ, 전환 스크립트 자동화</span><span class="result">상시 이중화 대비 연 40% 이상 절감</span></li>
+      <li><span class="name"><a href="#monitoring">운영 모니터링</a></span><span class="desc">평시와 모집 시즌을 나눈 CloudWatch 대시보드</span><span class="result">대시보드 2종, 알람 12종</span></li>
+      <li><span class="name"><a href="#troubleshooting">장애 재분석</a></span><span class="desc">로그인 장애를 남은 지표와 공식 문서로 다시 분석</span><span class="result">처음 가설 기각, WAF 요청 수 제한으로 재정의</span></li>
+      <li><span class="name"><a href="#backend-docs">backend-docs</a></span><span class="desc">명세 저장소 구축, 목록 생성과 형식 검사 자동화, 합의 절차 설계</span><span class="result">기능 명세 68개, TC 864개 이전</span></li>
+      <li><span class="name">그 밖에</span><span class="desc">백엔드 팀 운영, 관리자 기능 개발, Terraform 마이그레이션 진행 중 (네트워크 완료, CDN 남음)</span></li>
+    </ul>
+    <p class="achievement"><strong>성과</strong>제24회 BOAZ 컨퍼런스 오프닝 세션 발표 (2026.07.25)</p>
+
+    <figure class="figure"><a href="../assets/img/boaz-web/site-main.webp" target="_blank" rel="noopener"><img src="../assets/img/boaz-web/site-main.webp" width="1800" height="964" alt="BOAZ 공식 웹사이트 메인 화면: BIGDATA IS OUR A TO Z 문구와 캐릭터, 커리큘럼·리크루팅·아카이브·자주 묻는 질문 메뉴" loading="lazy" decoding="async"></a><figcaption>BOAZ 공식 웹사이트 메인 화면</figcaption></figure>
 
     <nav class="toc" aria-labelledby="toc-title">
       <h2 id="toc-title">목차</h2>
@@ -93,16 +98,19 @@
         <li><a href="#infra-2">인프라 설계 의사결정 (2): 시즌제 고가용성</a></li>
         <li><a href="#monitoring">운영 모니터링 및 알람</a></li>
         <li><a href="#troubleshooting">트러블슈팅: 처음 찾은 원인이 틀렸던 로그인 장애</a></li>
+        <li><a href="#backend-docs">backend-docs: 명세를 코드처럼 관리하는 저장소</a></li>
       </ol>
     </nav>
 
     <section class="part" id="infra-1">
       <p class="part-label">01</p>
       <h2>인프라 설계 의사결정 (1): 보안과 비용의 경계</h2>
-      <p class="part-lead">초기에는 개인정보를 다루는 사이트인 만큼 보안을 최우선으로 설계했습니다.</p>
+      <p class="part-lead">지켜야 할 보안을 오리진 직접 접근 차단과 DB 격리로 정의하고, 이를 유지하면서 고정비와 복잡도를 줄였습니다.</p>
 
       <div class="topic">
         <h3>구성 비교</h3>
+        <p class="one-liner">초기에는 개인정보를 다루는 사이트인 만큼 보안을 최우선으로 설계했습니다.</p>
+<figure class="figure"><a href="../assets/img/boaz-web/infra-initial.webp" target="_blank" rel="noopener"><img src="../assets/img/boaz-web/infra-initial.webp" width="1349" height="640" alt="초기 AWS 인프라 설계: CloudFront에서 퍼블릭 서브넷 ALB를 거쳐 프라이빗 서브넷 Auto Scaling EC2와 RDS Multi-AZ, 운영 접속용 Bastion Host, CodeDeploy용 Interface Endpoint" loading="lazy" decoding="async"></a><figcaption>초기 설계</figcaption></figure>
         <div class="table-wrap">
           <table>
             <thead><tr><th>구성</th><th>보안</th><th>월 비용</th><th>추가 인프라</th></tr></thead>
@@ -125,7 +133,7 @@
           <li>프론트엔드·관리자 페이지는 S3 + CloudFront로 정적 배포, ACM 와일드카드 인증서</li>
           <li>백엔드는 GitHub Actions → S3(JAR) → CodeDeploy로 배포</li>
         </ul>
-<figure class="figure"><a href="../assets/img/boaz-web/infra-normal.webp" target="_blank" rel="noopener"><img src="../assets/img/boaz-web/infra-normal.webp" width="1800" height="1020" alt="평시 AWS 인프라: Route 53, CloudFront(API·Admin·Web), 퍼블릭 서브넷 EC2-A, 프라이빗 서브넷 RDS Single-AZ, CodeDeploy 배포" loading="lazy" decoding="async"></a><figcaption>최종 설계 (평시 구조)</figcaption></figure>
+<figure class="figure"><a href="../assets/img/boaz-web/infra-normal.webp" target="_blank" rel="noopener"><img src="../assets/img/boaz-web/infra-normal.webp" width="1800" height="1020" alt="평시 AWS 인프라: Route 53, CloudFront(API·Admin·Web), 퍼블릭 서브넷 EC2-A, 프라이빗 서브넷 RDS Single-AZ, CodeDeploy 배포" loading="lazy" decoding="async"></a><figcaption>최종 설계 (평상시 구조)</figcaption></figure>
         <div class="callout"><p>지켜야 하는 보안을 <strong>오리진 직접 접근 차단 + DB 격리</strong>로 정의하고, 이를 유지하면서 <strong>고정비와 복잡도를 줄이는 선택</strong>을 했습니다.</p></div>
       </div>
     </section>
@@ -133,6 +141,7 @@
     <section class="part" id="infra-2">
       <p class="part-label">02</p>
       <h2>인프라 설계 의사결정 (2): 고가용성은 연 4주만</h2>
+      <p class="part-lead">장애가 곧 접수 중단인 모집 기간에만 이중화하고 전환을 스크립트로 자동화해, 상시 이중화 대비 연 40% 이상 절감했습니다.</p>
       <p class="part-lead">신규 기수 모집은 1년에 두 번, 2주 동안 진행됩니다. 그 기간에는 서비스가 끊기면 안 된다는 요구 사항이 있었습니다.</p>
 
       <div class="topic">
@@ -167,6 +176,7 @@
     <section class="part" id="monitoring">
       <p class="part-label">03</p>
       <h2>운영 모니터링 및 알람 (CloudWatch + SNS)</h2>
+      <p class="part-lead">평시와 모집 시즌은 인프라 구성이 달라 대시보드를 나누고, 알람 임계치는 장애로 이어지는 지점에서 거꾸로 정했습니다.</p>
 
       <div class="topic">
         <h3>대시보드를 두 개로 나눈 이유</h3>
@@ -237,6 +247,66 @@
           <p><strong>확신 정도:</strong> 정황 증거는 서로 맞지만 WAF 로그가 꺼져 있어 직접 증거는 없습니다.</p>
           <p><strong>이후:</strong> 서버가 아닌 사용자 증상(오류, 지연, 차단) 중심의 모니터링 개선안을 작성해 팀 리뷰 중입니다 (2026.10). WAF 차단 알림과 로그, 요청 ID를 남기는 요청 로그, SLI 후보를 정하고 SLO는 관찰 데이터로 결정합니다.</p>
         </div>
+      </div>
+    </section>
+
+    <section class="part" id="backend-docs">
+      <p class="part-label">05 · 진행 중 (2026.10 –)</p>
+      <h2>backend-docs: 명세를 코드처럼 관리하는 저장소</h2>
+      <p class="part-lead">노션 명세가 코드와 어긋나고 이력이 남지 않았다 → 비공개 저장소로 옮기고 목록 생성, 형식 검사, 코드 변경 알림을 자동화했습니다.</p>
+
+      <div class="topic">
+        <h3>문제</h3>
+        <ul style="margin-top:8px">
+          <li>하반기 새 기능은 프론트엔드와 API를 합의해야 하는데, 엔드포인트와 요청/응답 형식을 적은 명세가 없었다</li>
+          <li>노션의 기능 명세와 테스트 명세가 코드보다 낡았고 변경 이력을 추적하기 어려웠다</li>
+          <li>백엔드 저장소는 공개라 권한 규칙 같은 내부 내용을 둘 수 없었다</li>
+        </ul>
+
+        <h4>① 코드가 바뀌면 명세도 따라가게</h4>
+        <ol class="flow-grid" aria-label="명세 동기화 흐름">
+          <li><strong>백엔드 PR</strong>컨트롤러, DTO, 엔티티, 에러 코드, 권한 변경</li>
+          <li class="auto"><strong>봇 코멘트</strong>명세 반영 필요 알림 (머지는 막지 않음)</li>
+          <li><strong>명세 PR</strong>/sync-spec 스킬로 변경분 반영</li>
+          <li><strong>형식 검사</strong>PR에서는 검사만, 목록은 커밋하지 않음</li>
+          <li><strong>main 머지</strong>리뷰어는 도메인 담당자</li>
+          <li class="auto"><strong>목록, DBML 생성</strong>머리말을 모아 기능 목록 자동 갱신</li>
+        </ol>
+        <figure class="figure"><a href="../assets/img/boaz-web/docs-bot-comment.webp" target="_blank" rel="noopener"><img src="../assets/img/boaz-web/docs-bot-comment.webp" width="1344" height="444" alt="github-actions 봇 코멘트: API·스키마 관련 파일이 바뀌었어요. 머지 후 backend-docs에 반영이 필요한지 확인, /sync-spec 236 안내, 알림용이며 머지를 막지 않음" loading="lazy" decoding="async"></a><figcaption>백엔드 PR에 달린 반영 알림</figcaption></figure>
+        <figure class="figure"><a href="../assets/img/boaz-web/docs-spec-list.webp" target="_blank" rel="noopener"><img src="../assets/img/boaz-web/docs-spec-list.webp" width="1559" height="799" alt="자동 생성된 기능 명세서 목록 Admin 표: ADMIN-01부터 07까지 화면, HTTP method, 기능명, 상태, 협의, 우선순위, 담당" loading="lazy" decoding="async"></a><figcaption>머지 시 자동 생성되는 목록 (admin)</figcaption></figure>
+        <div class="callout"><p><strong>AI로 작업해도 같은 형식:</strong> AGENTS.md(기준 자료, 금지 사항, 작업 절차, PR 전 확인 목록)와 Claude Code 스킬 3개(명세 이전, 코드 변경 반영, 테스트 명세 작성)를 저장소에 포함</p></div>
+
+        <h4>② 프론트엔드 합의: PR을 열어 둔 채 회의로 다듬고, 합의 후 머지</h4>
+        <ol class="flow-grid" aria-label="프론트엔드 합의 흐름">
+          <li><strong>명세 PR 작성</strong>기능 담당 팀원</li>
+          <li><strong>협의 포인트 정리</strong>회의록에 AI로 먼저 정리, 답할 수 있는 건 먼저 답변</li>
+          <li><strong>서면 논의와 회의</strong>프론트엔드와 주고받으며 결정</li>
+          <li><strong>화면과 명세 대조</strong>탭별로 세부 확정, 같은 PR에 커밋 추가</li>
+          <li><strong>합의 후 머지</strong>백엔드 PM 확인, 상태 "확정"</li>
+          <li><strong>이후 변경은 작은 PR</strong>결정 내용과 이유를 이력에 기록</li>
+        </ol>
+
+        <h4>판단과 검토한 대안</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>판단</th><th>검토한 대안과 이유</th></tr></thead>
+            <tbody>
+              <tr><td>코드 변경 알림은 봇 코멘트로, 머지는 막지 않음</td><td>PR 템플릿 체크 칸은 습관적으로 "없음"을 골라 기각, 다른 저장소 이슈 자동 생성은 토큰 관리 부담으로 기각, 주 1회 대조는 놓치는 일이 생기면 추가</td></tr>
+              <tr><td>자동 생성 파일은 main에서만 갱신</td><td>처음엔 PR마다 봇이 목록을 커밋 → admin PR 머지 후 열려 있던 PR 2개가 충돌한 날 구조 변경</td></tr>
+              <tr><td>합의는 PR을 열어 둔 채 다듬고, 합의 후 머지</td><td>처음엔 "협의 중"으로 먼저 머지하는 절차를 설계 → 혼자 먼저 검토하면 수정이 또 생겨 공유와 논의에 시간이 두 배로 듦. 기능이 커지고 일정이 촉박해 회의 방식에 맞춰 바꿈</td></tr>
+              <tr><td>코드(dev) 기준 이전, 노션과 차이는 명세마다 기록</td><td>어느 쪽이 맞는지는 사람이 정함. 확인 못 한 내용은 "검토 필요"로 남기고 추측으로 채우지 않음</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>이전과 정합화 결과</h4>
+        <div class="metrics">
+          <div class="metric"><div class="value">68 + 72개</div><div class="label">명세 이전. 기능 명세와 테스트 명세(TC 864개) 이전 PR 작성, 8개 도메인</div></div>
+          <div class="metric"><div class="value">68개 중 66개</div><div class="label">노션 명세가 코드와 어긋나 있던 기능 (필드, 쿠키 이름, 에러 코드 등)</div></div>
+          <div class="metric"><div class="value">28곳 → 2건</div><div class="label">"검토 필요" 중 코드 수정이 필요한 문제를 백엔드 이슈로 분리</div></div>
+          <div class="metric"><div class="value">5종 → 1종</div><div class="label">테스트 TC 번호 형식 통일, 번호 없던 약 380개 정리, 전체 1,438개 통과</div></div>
+        </div>
+        <div class="callout"><p><strong>진행 중 (2026.11.14):</strong> 명세 이전 PR 5개 중 1개 머지, 4개 리뷰 대기 / 팀원 2명이 새 기능 명세를 이 저장소에서 작성 / 코드 변경 알림이 실제로 동작</p></div>
       </div>
     </section>
 
